@@ -44,6 +44,8 @@ class Vertices {
 		}
 };
 
+int xx = 0;
+
 Vertices readVertexFromFIle(const char* fileName) {
 	FILE* externalFile;
 	fopen_s(&externalFile, fileName, "r");
@@ -77,7 +79,7 @@ void drawVector(Vertices * vertices) {
 	glBegin(GL_POLYGON);
 	int i = 0;
 	while (i < (vertices->neff)) {
-		glVertex2f(vertices->vertices[i].x, vertices->vertices[i].y);
+		glVertex2f(vertices->vertices[i].x+xx, vertices->vertices[i].y);
 		i++;
 	}
 	glEnd();
@@ -194,7 +196,7 @@ int main(int argc, char** argv) {  // Initialize GLUT and
 	glutInitWindowPosition(0, 0);     // Location of window in screen coordinates.
 	glutCreateWindow("GL Cars"); // Parameter is window title.
 	glutDisplayFunc(display);            // Called when the window needs to be redrawn.
-
+	glutIdleFunc(display);
 	glutMainLoop(); // Run the event loop!  This function does not return.
 					// Program ends when user closes the window.
 	return 0;
