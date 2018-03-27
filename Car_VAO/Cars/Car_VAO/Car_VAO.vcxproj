@@ -75,10 +75,10 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>D:\Kuliah\Semester 6\IF3260 - Grafika Komputer\Tugas\freeglut\include;D:\Kuliah\Semester 6\IF3260 - Grafika Komputer\Tugas\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\OpenGL\freeglut\include;C:\OpenGL\glew-2.1.0\include;D:\Kuliah\Semester 6\IF3260 - Grafika Komputer\Tugas\freeglut\include;D:\Kuliah\Semester 6\IF3260 - Grafika Komputer\Tugas\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>D:\Kuliah\Semester 6\IF3260 - Grafika Komputer\Tugas\freeglut\lib;D:\Kuliah\Semester 6\IF3260 - Grafika Komputer\Tugas\glew-2.1.0\lib\Release\Win32;D:\Kuliah\Semester 6\IF3260 - Grafika Komputer\Tugas\glew-2.1.0\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\OpenGL\freeglut\lib;C:\OpenGL\glew-2.1.0\lib\Release\Win32;C:\OpenGL\freeglut\bin;C:\OpenGL\freeglut\lib\x64;D:\Kuliah\Semester 6\IF3260 - Grafika Komputer\Tugas\glew-2.1.0\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -87,7 +87,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\OpenGL\freeglut\include;C:\OpenGL\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>C:\OpenGL\freeglut\lib\x64;C:\OpenGL\glew-2.1.0\lib\Release\x64;C:\OpenGL\freeglut\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freeglut.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -96,12 +101,12 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>D:\Kuliah\Semester 6\IF3260 - Grafika Komputer\Tugas\freeglut\include;D:\Kuliah\Semester 6\IF3260 - Grafika Komputer\Tugas\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\OpenGL\freeglut\include;C:\OpenGL\glew-2.1.0\include;D:\Kuliah\Semester 6\IF3260 - Grafika Komputer\Tugas\freeglut\include;D:\Kuliah\Semester 6\IF3260 - Grafika Komputer\Tugas\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>D:\Kuliah\Semester 6\IF3260 - Grafika Komputer\Tugas\freeglut\lib;D:\Kuliah\Semester 6\IF3260 - Grafika Komputer\Tugas\glew-2.1.0\lib\Release\Win32;D:\Kuliah\Semester 6\IF3260 - Grafika Komputer\Tugas\glew-2.1.0\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\OpenGL\freeglut\lib;C:\OpenGL\glew-2.1.0\lib\Release\Win32;C:\OpenGL\freeglut\bin;C:\OpenGL\freeglut\lib\x64;D:\Kuliah\Semester 6\IF3260 - Grafika Komputer\Tugas\glew-2.1.0\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -112,10 +117,13 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\OpenGL\freeglut\include;C:\OpenGL\glew-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\OpenGL\freeglut\lib\x64;C:\OpenGL\glew-2.1.0\lib\Release\x64;C:\OpenGL\freeglut\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freeglut.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

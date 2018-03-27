@@ -225,9 +225,9 @@ void display() {  // Display function will draw the image.
 	drawVector(&velgdepan);
 	glPopMatrix();
 
-	glColor3f(237.0 / 255.0, 2.0 / 255.0, 2.0 / 255.0);
+	glColor3f(255.0 / 255.0, 30.0 / 255.0, 30.0 / 255.0);
 	drawVector(&spion);
-	glColor3f(99.0/255.0, 0, 0);//biru
+	glColor3f(255.0 / 255.0, 255 / 255, 0);
 	drawLine(&garismobil);
 	
 

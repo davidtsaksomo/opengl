@@ -152,7 +152,7 @@ void init() {
 	float lampubelakangData[50][2];
 	float lampudepan1Data[50][2];
 	float lampudepan2Data[50][2];
-	float sasismobilData[50][2];
+	float sasismobilData[150][2];
 	float spionData[50][2];
 	float rodadepanData[50][2];
 	float rodakecildepanData[50][2];
@@ -479,13 +479,13 @@ void display() {
 	glPopMatrix();
 
 	//spion
-	glColor3f(237.0 / 255.0, 2.0 / 255.0, 2.0 / 255.0);
+	glColor3f(255.0 / 255.0, 30.0 / 255.0, 30.0 / 255.0);
 	glBindBuffer(GL_ARRAY_BUFFER, spionID);
 	glVertexPointer(2, GL_FLOAT, 2 * sizeof(float), 0);
 	glDrawArrays(GL_POLYGON, 0, spion.neff);
 
 	//garis_mobil
-	glColor3f(99.0 / 255.0, 0, 0);
+	glColor3f(255.0 / 255.0, 255/255, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, garismobilID);
 	glVertexPointer(2, GL_FLOAT, 2 * sizeof(float), 0);
 	glDrawArrays(GL_LINE_LOOP, 0, garismobil.neff);
