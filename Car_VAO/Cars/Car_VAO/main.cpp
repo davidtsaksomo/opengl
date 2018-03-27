@@ -11,12 +11,18 @@
 *
 *          gcc -o first-triangle first-triangle.c -lGL -lglut
 */
-#include <GL/freeglut.h>   // freeglut.h might be a better alternative, if available.
-#include <stdio.h>
+#include <windows.h>
+#include <iostream>
 #include <algorithm>
 #include <fstream>
-#define width 1300
-#define height 700
+#include <GL/glew.h>
+#include <GL/freeglut.h>
+using namespace std;
+
+#pragma comment(lib,"glew32.lib")
+
+GLuint ID;
+
 class Point {
 public:
 	float x;
@@ -44,9 +50,6 @@ public:
 	}
 };
 
-static GLfloat ANGLE = 0;
-
-
 Vertices readVertexFromFIle(const char* fileName) {
 	FILE* externalFile;
 	fopen_s(&externalFile, fileName, "r");
@@ -65,8 +68,10 @@ Vertices readVertexFromFIle(const char* fileName) {
 
 	int i = 0;
 	while (fscanf_s(externalFile, "%f,%f\n", &_x, &_y) == 2) {
-		vertices.vertices[i].x = (_x / width) * 2 - 1;
-		vertices.vertices[i].y = ((_y / height) * 2 - 1)*-1;
+		vertices.vertices[i].x = _x;
+		//vertices.vertices[i].x = (_x / width) * 2 - 1;
+		//vertices.vertices[i].y = ((_y / height) * 2 - 1)*-1;
+		vertices.vertices[i].y = _y;
 		i++;
 	}
 	vertices.neff = i;
@@ -74,146 +79,89 @@ Vertices readVertexFromFIle(const char* fileName) {
 	return vertices;
 }
 
-void drawVector(Vertices * vertices) {
-	glBegin(GL_POLYGON);
-	int i = 0;
-	while (i < (vertices->neff)) {
-		glVertex2f(vertices->vertices[i].x, vertices->vertices[i].y);
-		i++;
+Vertices garis1;
+Vertices garis2;
+Vertices garismobil;
+Vertices gedung;
+Vertices jalan;
+Vertices kacabelakang;
+Vertices kacadepan;
+Vertices lampubelakang;
+Vertices lampudepan1;
+Vertices lampudepan2;
+Vertices sasismobil;
+Vertices spion;
+Vertices rodadepan;
+Vertices rodakecildepan;
+Vertices velgdepan;
+Vertices rodabelakang;
+Vertices rodakecilbelakang;
+Vertices velgbelakang;
+
+void init() {
+
+	//read from file
+	garis1 = readVertexFromFIle("resources/garis1.txt");
+	garis2 = readVertexFromFIle("resources/garis2.txt");
+	garismobil = readVertexFromFIle("resources/garismobil.txt");
+	gedung = readVertexFromFIle("resources/gedung.txt");
+	jalan = readVertexFromFIle("resources/jalan.txt");
+	kacabelakang = readVertexFromFIle("resources/kacabelakang.txt");
+	kacadepan = readVertexFromFIle("resources/kacadepan.txt");
+	lampubelakang = readVertexFromFIle("resources/lampubelakang.txt");
+	lampudepan1 = readVertexFromFIle("resources/lampudepan1.txt");
+	lampudepan2 = readVertexFromFIle("resources/lampudepan2.txt");
+	sasismobil = readVertexFromFIle("resources/sasismobil.txt");
+	spion = readVertexFromFIle("resources/spion.txt");
+	rodadepan = readVertexFromFIle("resources/rodadepan.txt");
+	rodakecildepan = readVertexFromFIle("resources/rodakecildepan.txt");
+	velgdepan = readVertexFromFIle("resources/velgdepan.txt");
+	rodabelakang = readVertexFromFIle("resources/rodabelakang.txt");
+	rodakecilbelakang = readVertexFromFIle("resources/rodakecilbelakang.txt");
+	velgbelakang = readVertexFromFIle("resources/velgbelakang.txt");
+
+	glewInit();
+	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+	glShadeModel(GL_FLAT);
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	float spionData[9][2];
+	for (int i = 0; i < spion.neff; i++) {
+		spionData[i][0] = spion.vertices[i].x;
+		spionData[i][1] = spion.vertices[i].y;
+		cout << spionData[i][0] << " , " << spionData[i][1] << endl;
 	}
-	glEnd();
+	
+	glGenBuffers(1, &ID);
+	glBindBuffer(GL_ARRAY_BUFFER, ID);
+	glBufferData(GL_ARRAY_BUFFER, spion.neff, spionData, GL_STATIC_DRAW);
 }
 
-void drawLine(Vertices * vertices) {
-	glBegin(GL_LINE_LOOP);
-	int i = 0;
-	while (i < (vertices->neff)) {
-		glVertex2f(vertices->vertices[i].x, vertices->vertices[i].y);
-		i++;
-	}
-	glEnd();
+void reshape(int w, int h) {
+	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(0.0f, (GLdouble)w, 0.0f, (GLdouble)h);
 }
 
-void display() {  // Display function will draw the image.	
-
-				  //read from file
-	Vertices garis1 = readVertexFromFIle("resources/garis1.txt");
-	Vertices garis2 = readVertexFromFIle("resources/garis2.txt");
-	Vertices garismobil = readVertexFromFIle("resources/garismobil.txt");
-	Vertices gedung = readVertexFromFIle("resources/gedung.txt");
-	Vertices jalan = readVertexFromFIle("resources/jalan.txt");
-	Vertices kacabelakang = readVertexFromFIle("resources/kacabelakang.txt");
-	Vertices kacadepan = readVertexFromFIle("resources/kacadepan.txt");
-	Vertices lampubelakang = readVertexFromFIle("resources/lampubelakang.txt");
-	Vertices lampudepan1 = readVertexFromFIle("resources/lampudepan1.txt");
-	Vertices lampudepan2 = readVertexFromFIle("resources/lampudepan2.txt");
-	Vertices sasismobil = readVertexFromFIle("resources/sasismobil.txt");
-	Vertices spion = readVertexFromFIle("resources/spion.txt");
-	Vertices rodadepan = readVertexFromFIle("resources/rodadepan.txt");
-	Vertices rodakecildepan = readVertexFromFIle("resources/rodakecildepan.txt");
-	Vertices velgdepan = readVertexFromFIle("resources/velgdepan.txt");
-	Vertices rodabelakang = readVertexFromFIle("resources/rodabelakang.txt");
-	Vertices rodakecilbelakang = readVertexFromFIle("resources/rodakecilbelakang.txt");
-	Vertices velgbelakang = readVertexFromFIle("resources/velgbelakang.txt");
-
-	//Langit
-	glClearColor(135.0 / 255.0, 206.0 / 255.0, 250.0 / 255.0, 1);  // sky color
-	glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-	//Draw Gedung
-	glEnable(GL_STENCIL_TEST);
-	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-	glStencilFunc(GL_ALWAYS, 0, 1);
-	glStencilOp(GL_KEEP, GL_KEEP, GL_INVERT);
-	glStencilMask(1);
-	drawVector(&gedung);
-	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-	glStencilFunc(GL_EQUAL, 1, 1);
-	glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-	glColor3f(11.0 / 255.0, 61.0 / 255.0, 170.0 / 255.0);
-	drawVector(&gedung);
-	glDisable(GL_STENCIL_TEST);
-
-	//Draw Jalan
-	glColor3f(113.0 / 255.0, 113.0 / 255.0, 115.0 / 255.0);
-	drawVector(&jalan);
-	glColor3f(1, 1, 1);//putih
-	drawVector(&garis1);
-	drawVector(&garis2);
-
-	//Draw Mobil
-	glEnable(GL_STENCIL_TEST);
-	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-	glStencilFunc(GL_ALWAYS, 0, 1);
-	glStencilOp(GL_KEEP, GL_KEEP, GL_INVERT);
-	glStencilMask(1);
-	drawVector(&sasismobil);
-	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-	glStencilFunc(GL_EQUAL, 1, 1);
-	glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-	glColor3f(237.0 / 255.0, 2.0 / 255.0, 2.0 / 255.0);
-	drawVector(&sasismobil);
-	glDisable(GL_STENCIL_TEST);
-
-	glColor3f(255.0 / 255.0, 145.0 / 255.0, 12.0 / 255.0);
-	drawVector(&lampubelakang);
-	glColor3f(20.0 / 255.0, 2.0 / 255.0, 20.0 / 255.0);
-	drawVector(&kacabelakang);
-	drawVector(&kacadepan);
-	glColor3f(199.0 / 255.0, 202.0 / 255.0, 207.0 / 255.0);
-	drawVector(&lampudepan1);
-	glColor3f(0, 0, 0);
-	drawVector(&lampudepan2);
-	drawVector(&rodabelakang);
-	drawVector(&rodadepan);
-	glColor3f(0.9, 0.9, 0.9);
-	drawVector(&rodakecilbelakang);
-	drawVector(&rodakecildepan);
-
-	glColor3f(0.3, 0.3, 0.3);
-
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glTranslatef(-0.29, -0.34, 0);
-	glRotatef(ANGLE, 0.0, 0.0, 1.0);
-	glTranslatef(0.29, 0.34, 0);
-	drawVector(&velgbelakang);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(0.29, -0.34, 0);
-	glRotatef(ANGLE, 0.0, 0.0, 1.0);
-	glTranslatef(-0.29, 0.34, 0);
-	drawVector(&velgdepan);
-	glPopMatrix();
-
-	glColor3f(237.0 / 255.0, 2.0 / 255.0, 2.0 / 255.0);
-	drawVector(&spion);
-	glColor3f(0, 0, 99.0 / 255.0);//biru
-	drawLine(&garismobil);
-
-
-	glutSwapBuffers(); // Required to copy color buffer onto the screen.
+void display() {
+	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glBindBuffer(GL_ARRAY_BUFFER, ID);
+	glVertexPointer(2, GL_FLOAT, 2 * sizeof(float), 0);
+	glDrawArrays(GL_LINE_LOOP, 0, spion.neff);
+	glFlush();
 }
 
-void managerIdle(void)
-{
-	Sleep(5.0);
-	ANGLE -= 10;
-	glutPostRedisplay();
-}
-
-int main(int argc, char** argv) {  // Initialize GLUT
-
+int main(int argc, char **argv) {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_SINGLE);    // Use single color buffer and no depth buffer.
-	glutInitWindowSize(1300, 700);         // Size of display area, in pixels.
-	glutInitWindowPosition(0, 0);     // Location of window in screen coordinates.
-	glutCreateWindow("GL Cars"); // Parameter is window title.
-	glutDisplayFunc(display);            // Called when the window needs to be redrawn.
-	glutIdleFunc(managerIdle);
-	glutMainLoop(); // Run the event loop!  This function does not return.
-					// Program ends when user closes the window.
+	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+	glutInitWindowSize(1366, 768);
+	glutInitWindowPosition(0, 0);
+	glutCreateWindow("GL Cars");
+	init();
+	glutDisplayFunc(display);
+	glutReshapeFunc(reshape);
+	glutMainLoop();
 	return 0;
-
 }
