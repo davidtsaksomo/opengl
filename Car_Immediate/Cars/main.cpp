@@ -17,6 +17,7 @@
 #include <fstream>
 #define width 1300
 #define height 700
+#define LANGIT_SPEED 4000
 class Point {
 	public:
 		float x;
@@ -45,7 +46,12 @@ class Vertices {
 };
 
 static GLfloat ANGLE = 0;
-
+static GLfloat XTRANSLATED_JALAN = 0.5;
+static GLfloat XTRANSLATED_GEDUNG = 2.3;
+static GLfloat RED_LANGIT = 135.0;
+static GLfloat GREEN_LANGIT = 206.0;
+static GLfloat BLUE_LANGIT = 250.0;
+static GLboolean kePagi = false;
 
 Vertices readVertexFromFIle(const char* fileName) {
 	FILE* externalFile;
@@ -93,34 +99,57 @@ void drawLine(Vertices * vertices) {
 	}
 	glEnd();
 }
+Vertices garis1;
+Vertices garis2;
+Vertices garismobil;
+Vertices gedung;
+Vertices jalan;
+Vertices kacabelakang;
+Vertices kacadepan;
+Vertices lampubelakang;
+Vertices lampudepan1;
+Vertices lampudepan2;
+Vertices sasismobil;
+Vertices spion;
+Vertices rodadepan;
+Vertices rodakecildepan;
+Vertices velgdepan;
+Vertices rodabelakang;
+Vertices rodakecilbelakang;
+Vertices velgbelakang;
 
+void readfile() {
+
+	garis1 = readVertexFromFIle("resources/garis1.txt");
+	garis2 = readVertexFromFIle("resources/garis2.txt");
+	garismobil = readVertexFromFIle("resources/garismobil.txt");
+	gedung = readVertexFromFIle("resources/gedung.txt");
+	jalan = readVertexFromFIle("resources/jalan.txt");
+	kacabelakang = readVertexFromFIle("resources/kacabelakang.txt");
+	kacadepan = readVertexFromFIle("resources/kacadepan.txt");
+	lampubelakang = readVertexFromFIle("resources/lampubelakang.txt");
+	lampudepan1 = readVertexFromFIle("resources/lampudepan1.txt");
+	lampudepan2 = readVertexFromFIle("resources/lampudepan2.txt");
+	sasismobil = readVertexFromFIle("resources/sasismobil.txt");
+	spion = readVertexFromFIle("resources/spion.txt");
+	rodadepan = readVertexFromFIle("resources/rodadepan.txt");
+	rodakecildepan = readVertexFromFIle("resources/rodakecildepan.txt");
+	velgdepan = readVertexFromFIle("resources/velgdepan.txt");
+	rodabelakang = readVertexFromFIle("resources/rodabelakang.txt");
+	rodakecilbelakang = readVertexFromFIle("resources/rodakecilbelakang.txt");
+	velgbelakang = readVertexFromFIle("resources/velgbelakang.txt");
+
+}
 void display() {  // Display function will draw the image.	
 
-	//read from file
-	Vertices garis1 = readVertexFromFIle("resources/garis1.txt");
-	Vertices garis2 = readVertexFromFIle("resources/garis2.txt");
-	Vertices garismobil = readVertexFromFIle("resources/garismobil.txt");
-	Vertices gedung = readVertexFromFIle("resources/gedung.txt");
-	Vertices jalan = readVertexFromFIle("resources/jalan.txt");
-	Vertices kacabelakang = readVertexFromFIle("resources/kacabelakang.txt");
-	Vertices kacadepan = readVertexFromFIle("resources/kacadepan.txt");
-	Vertices lampubelakang = readVertexFromFIle("resources/lampubelakang.txt");
-	Vertices lampudepan1 = readVertexFromFIle("resources/lampudepan1.txt");
-	Vertices lampudepan2 = readVertexFromFIle("resources/lampudepan2.txt");
-	Vertices sasismobil = readVertexFromFIle("resources/sasismobil.txt");
-	Vertices spion = readVertexFromFIle("resources/spion.txt");
-	Vertices rodadepan = readVertexFromFIle("resources/rodadepan.txt");
-	Vertices rodakecildepan = readVertexFromFIle("resources/rodakecildepan.txt");	
-	Vertices velgdepan = readVertexFromFIle("resources/velgdepan.txt");
-	Vertices rodabelakang = readVertexFromFIle("resources/rodabelakang.txt");
-	Vertices rodakecilbelakang = readVertexFromFIle("resources/rodakecilbelakang.txt");
-	Vertices velgbelakang = readVertexFromFIle("resources/velgbelakang.txt");
-
 	//Langit
-	glClearColor(135.0/255.0, 206.0 / 255.0, 250.0 / 255.0, 1);  // sky color
+	glClearColor(RED_LANGIT/255.0, GREEN_LANGIT / 255.0, BLUE_LANGIT / 255.0, 1);  // sky color
+	
 	glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	//Draw Gedung
+	glPushMatrix();
+	glTranslatef(XTRANSLATED_GEDUNG, 0, 0);
 	glEnable(GL_STENCIL_TEST);
 	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 	glStencilFunc(GL_ALWAYS, 0, 1);
@@ -133,13 +162,22 @@ void display() {  // Display function will draw the image.
 	glColor3f(11.0 / 255.0, 61.0 / 255.0, 170.0 / 255.0);
 	drawVector(&gedung);
 	glDisable(GL_STENCIL_TEST);
+	glPopMatrix();
 
 	//Draw Jalan
 	glColor3f(113.0 / 255.0, 113.0 / 255.0, 115.0 / 255.0);
 	drawVector(&jalan);
 	glColor3f(1, 1, 1);//putih
+
+	glPushMatrix();
+	glTranslatef(XTRANSLATED_JALAN, 0, 0);
 	drawVector(&garis1);
+	glPopMatrix();
+	
+	glPushMatrix();
+	glTranslatef(XTRANSLATED_JALAN, 0, 0);
 	drawVector(&garis2);
+	glPopMatrix();
 
 	//Draw Mobil
 	glEnable(GL_STENCIL_TEST);
@@ -200,6 +238,43 @@ void managerIdle(void)
 {
 	Sleep(5.0);
 	ANGLE -= 10;
+	
+	if (XTRANSLATED_JALAN < -0.5) {
+		XTRANSLATED_JALAN = 0.5;
+	}
+	else {
+		XTRANSLATED_JALAN -= 0.025;
+	}
+	
+	if (XTRANSLATED_GEDUNG < -2.3) {
+		XTRANSLATED_GEDUNG = 2.3;
+	}
+	else {
+		XTRANSLATED_GEDUNG -= 0.0005;
+	}
+
+	if (kePagi) {
+		if (RED_LANGIT >= 135.0 && GREEN_LANGIT >= 206.0 && BLUE_LANGIT >= 250.0) {
+			kePagi = false;
+		}
+		else {
+			RED_LANGIT += 135.0 / LANGIT_SPEED;
+			GREEN_LANGIT += 206.0 / LANGIT_SPEED;
+			BLUE_LANGIT += 250.0 / LANGIT_SPEED;
+		}
+	}
+	else {
+		if (RED_LANGIT <= 0 && GREEN_LANGIT <= 0 && BLUE_LANGIT <= 0) {
+			kePagi = true;
+		}
+		else {
+			RED_LANGIT -= 135.0 / LANGIT_SPEED;
+			GREEN_LANGIT -= 206.0 / LANGIT_SPEED;
+			BLUE_LANGIT -= 250.0 / LANGIT_SPEED;
+		}
+	}
+	
+	
 	glutPostRedisplay();
 }
 
@@ -210,6 +285,7 @@ int main(int argc, char** argv) {  // Initialize GLUT
 	glutInitWindowSize(1300, 700);         // Size of display area, in pixels.
 	glutInitWindowPosition(0, 0);     // Location of window in screen coordinates.
 	glutCreateWindow("GL Cars"); // Parameter is window title.
+	readfile();
 	glutDisplayFunc(display);            // Called when the window needs to be redrawn.
 	glutIdleFunc(managerIdle);
 	glutMainLoop(); // Run the event loop!  This function does not return.
