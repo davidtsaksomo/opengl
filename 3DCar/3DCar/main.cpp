@@ -92,10 +92,31 @@ GLvoid DrawGLScene()
 	glClearColor(1, 1, 1, 1);
 	glPushMatrix();
 	glLoadIdentity();
-	glTranslatef(-1.0, 0.0, -3.5);
-	glRotatef(xangle, 1.0, 0.0, 0.0);
+	glTranslatef(-1.0, -0.2, -3.5);
+
+	
+	//puter
+	glPushMatrix();
+	glTranslatef(1.0, 0, 0.4);
 	glRotatef(yangle, 0.0, 1.0, 0.0);
+	glTranslatef(-1.0, 0, -0.4);
+
+	glPushMatrix();
+	glTranslatef(0.0, 0.4, 0.35);
+	glRotatef(xangle, 1.0, 0.0, 0.0);
+	glTranslatef(0.0, -0.4, -0.35);
+	
+
 	glRotatef(zangle, 0.0, 0.0, 1.0);
+	
+	
+	
+	//glRotatef(xangle, 1.0, 0.0, 0.0);
+	//glRotatef(yangle, 0.0, 1.0, 0.0);
+	//glRotatef(zangle, 0.0, 0.0, 1.0);
+
+
+
 	glTranslatef(xt, yt, zt);
 	glScalef(xs, ys, zs);
 	glEnable(GL_COLOR_MATERIAL);
