@@ -22,8 +22,7 @@ GLfloat xs = 1.0, ys = 1.0, zs = 1.0;
 
 GLfloat xangle = 0.0, yangle = 0.0, zangle = 0.0, angle = 0.0;   /* axis angles */
 
-GLfloat r = 0, g = 0, b = 1;
-GLint light = 1;
+GLfloat r = 1, g = 0, b = 0;
 int count = 1, flg = 1;
 int view = 0;
 int flag2 = 0, wheelflag = 0;   //to switch fog effect
@@ -103,13 +102,6 @@ GLvoid DrawGLScene()
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 
 
-	glColor3f(1.0, .75, 0.0);
-	glPointSize(30.0);
-	glBegin(GL_POINTS);
-	glVertex3f(0.2, 0.3, 0.3);
-	glVertex3f(0.2, 0.3, 0.5);
-	glEnd();
-	glPointSize(200.0);
 
 
 
@@ -157,42 +149,17 @@ GLvoid DrawGLScene()
 	glVertex3f(0.7, 0.65, 0.2);
 	glVertex3f(1.7, 0.65, 0.2);        //top cover
 	glVertex3f(1.7, 0.65, 0.6);
-	//***************************back guard******************************
-	glColor3f(r, g, b);            /* Set The Color To Blue*/
-	glVertex3f(1.8, 0.5, 0.6);
-	glVertex3f(1.8, 0.5, 0.2);
-	glVertex3f(2.1, 0.4, 0.2);
-	glVertex3f(2.1, 0.4, 0.6);
-
-	/* bottom of cube*/
-	glVertex3f(2.1, 0.2, 0.6);
-	glVertex3f(2.1, 0.2, 0.2);
-	glVertex3f(1.8, 0.2, 0.6);
-	glVertex3f(1.8, 0.2, 0.6);
-
-	/* back of cube.*/
-	glVertex3f(2.1, 0.4, 0.6);
-	glVertex3f(2.1, 0.4, 0.2);
-	glVertex3f(2.1, 0.2, 0.2);
-	glVertex3f(2.1, 0.2, 0.6);
-
-	/* left of cube*/
-	glVertex3f(1.8, 0.2, 0.2);
-	glVertex3f(1.8, 0.5, 0.2);
-	glVertex3f(2.1, 0.4, 0.2);
-	glVertex3f(2.1, 0.2, 0.2);
-
-	/* Right of cube */
-	glVertex3f(1.8, 0.2, 0.6);
-	glVertex3f(1.8, 0.5, 0.6);
-	glVertex3f(2.1, 0.4, 0.6);
-	glVertex3f(2.1, 0.2, 0.6);
+	
 	//******************MIDDLE BODY************************************
 	glVertex3f(0.6, 0.5, 0.6);
 	glVertex3f(0.6, 0.2, 0.6);
 	glVertex3f(1.8, 0.2, 0.6);
 	glVertex3f(1.8, 0.5, 0.6);
 
+	glVertex3f(1.8, 0.2, 0.6);
+	glVertex3f(1.8, 0.2, 0.2);
+	glVertex3f(1.8, 0.5, 0.2);
+	glVertex3f(1.8, 0.5, 0.6);
 	/* bottom of cube*/
 	glVertex3f(0.6, 0.2, 0.6);
 	glVertex3f(0.6, 0.2, 0.2);
@@ -310,13 +277,7 @@ GLvoid DrawGLScene()
 	glVertex3f(1.7, 0.5, 0.6);
 
 	glEnd();
-	//************IGNITION SYSTEM**********************************
-	glPushMatrix();
-	glColor3f(0.7, 0.7, 0.7);
-	glTranslatef(1.65, 0.2, 0.3);
-	glRotatef(90.0, 0, 1, 0);
-	gluCylinder(t, 0.02, 0.03, .5, 10, 10);
-	glPopMatrix();
+
 	//********************WHEEL*********************************************
 
 	glColor3f(0.7, 0.7, 0.7);
@@ -373,69 +334,65 @@ GLvoid DrawGLScene()
 	
 }
 
-
 /*  The function called whenever a "normal" key is pressed. */
 void NormalKey(GLubyte key, GLint x, GLint y)
 {
 	switch (key) {
-	case ESCAPE: printf("escape pressed. exit.\n");
-		glutDestroyWindow(window);	/* Kill our window */
-		exit(0);
-		break;
 
+		case ESCAPE: printf("escape pressed. exit.\n");
+			glutDestroyWindow(window);	/* Kill our window */
+			exit(0);
+			break;
 
-	case 'W':                          /* Move up */
-		yt += 0.2;
-		glutPostRedisplay();
-		break;
+		case 'W':                          /* Move up */
+			yt += 0.2;
+			glutPostRedisplay();
+			break;
 
-	case 'S':
-		yt -= 0.2;                      /* Move down */
-		glutPostRedisplay();
-		break;
+		case 'S':
+			yt -= 0.2;                      /* Move down */
+			glutPostRedisplay();
+			break;
 
-	case 'w':                          /* Move forward */
-		zt += 0.2;
-		glutPostRedisplay();
-		break;
+		case 'w':                          /* Move forward */
+			zt += 0.2;
+			glutPostRedisplay();
+			break;
 
-	case 's':
-		zt -= 0.2;                      /* Move away */
-		glutPostRedisplay();
-		break;
+		case 's':
+			zt -= 0.2;                      /* Move away */
+			glutPostRedisplay();
+			break;
 
-	default:
-		break;
+		default:
+			break;
 	}
-
 }
 
 static void SpecialKeyFunc(int Key, int x, int y)
 {
 	switch (Key) {
+		case GLUT_KEY_DOWN:
+			xangle += 5.0;
+			glutPostRedisplay();
+			break;
 
-	case GLUT_KEY_DOWN: xangle += 5.0;
-		glutPostRedisplay();
-		break;
+		case GLUT_KEY_UP:
+			xangle -= 5.0;
+			glutPostRedisplay();
+			break;
 
-	case GLUT_KEY_UP:xangle -= 5.0;
-		glutPostRedisplay();
-		break;
+		case GLUT_KEY_RIGHT:
+			yangle += 5.0;
+			glutPostRedisplay();
+			break;
 
-	case GLUT_KEY_RIGHT:
-		yangle += 5.0;
-		glutPostRedisplay();
-		break;
-
-	case GLUT_KEY_LEFT:
-		yangle -= 5.0;
-		glutPostRedisplay();
-		break;
+		case GLUT_KEY_LEFT:
+			yangle -= 5.0;
+			glutPostRedisplay();
+			break;
 	}
 }
-
-
-
 
 void myreshape(int w, int h)
 {
@@ -461,8 +418,8 @@ int main(int argc, char **argv)
 	glutInit(&argc, argv);               /* Initialize GLUT state. */
 
 	glutInitDisplayMode(GLUT_RGBA |      /* RGB and Alpha */
-		GLUT_DOUBLE |     /* double buffer */
-		GLUT_DEPTH);     /* Z buffer (depth) */
+						GLUT_DOUBLE |     /* double buffer */
+						GLUT_DEPTH);     /* Z buffer (depth) */
 
 	glutInitWindowSize(Xsize, Ysize);     /* set initial window size. */
 	glutInitWindowPosition(0, 0);         /* upper left corner of the screen. */
