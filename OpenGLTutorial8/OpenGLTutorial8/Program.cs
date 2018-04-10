@@ -8,10 +8,11 @@ namespace OpenGLTutorial8
     {
         private static int width = 1280, height = 720;
         private static ShaderProgram program;
-        private static VBO<Vector3> cube, cubeNormals;
-        private static VBO<Vector2> cubeUV;
-        private static VBO<int> cubeQuads;
+        private static VBO<Vector3> cube, cubeNormals, window, windowNormals;
+        private static VBO<Vector2> cubeUV, windowUV;
+        private static VBO<int> cubeQuads, windowQuads;
         private static Texture glassTexture;
+        private static Texture kacaTexture;
         private static System.Diagnostics.Stopwatch watch;
         private static float xangle, yangle;
         private static bool autoRotate, lighting = true, fullscreen = false, alpha = true;
@@ -47,22 +48,156 @@ namespace OpenGLTutorial8
             program["enable_lighting"].SetValue(lighting);
 
             glassTexture = new Texture("glass.bmp");
+            kacaTexture = new Texture("kaca.bmp");
+
 
             cube = new VBO<Vector3>(new Vector3[] {
-                new Vector3(1, 1, -1), new Vector3(-1, 1, -1), new Vector3(-1, 1, 1), new Vector3(1, 1, 1),         // top
-                new Vector3(1, -1, 1), new Vector3(-1, -1, 1), new Vector3(-1, -1, -1), new Vector3(1, -1, -1),     // bottom
-                new Vector3(1, 1, 1), new Vector3(-1, 1, 1), new Vector3(-1, -1, 1), new Vector3(1, -1, 1),         // front face
-                new Vector3(1, -1, -1), new Vector3(-1, -1, -1), new Vector3(-1, 1, -1), new Vector3(1, 1, -1),     // back face
-                new Vector3(-1, 1, 1), new Vector3(-1, 1, -1), new Vector3(-1, -1, -1), new Vector3(-1, -1, 1),     // left
-                new Vector3(1, 1, -1), new Vector3(1, 1, 1), new Vector3(1, -1, 1), new Vector3(1, -1, -1) });      // right
+
+	        /* top of cube.*/
+	        new Vector3 (0.2f, 0.4f, 0.6f),
+            new Vector3 (0.6f, 0.5f, 0.6f),
+            new Vector3 (0.6f, 0.5f, 0.2f),
+            new Vector3 (0.2f, 0.4f, 0.2f),
+
+	        /* bottom of, cube*/
+	        new Vector3 (0.2f, 0.2f, 0.6f),
+            new Vector3 (0.6f, 0.2f, 0.6f),
+            new Vector3 (0.6f, 0.2f, 0.2f),
+            new Vector3 (0.2f, 0.2f, 0.2f),
+
+	        /* front of cube.*/
+            new Vector3 (0.2f, 0.2f, 0.6f),
+            new Vector3 (0.2f, 0.4f, 0.6f),
+            new Vector3 (0.2f, 0.4f, 0.2f),
+            new Vector3 (0.2f, 0.2f, 0.2f),
+
+	        /* back of cube.*/
+	        new Vector3 (0.6f, 0.2f, 0.6f),
+            new Vector3 (0.6f, 0.5f, 0.6f),
+            new Vector3 (0.6f, 0.5f, 0.2f),
+            new Vector3 (0.6f, 0.2f, 0.2f),
+
+	        /* left of cube*/
+	        new Vector3 (0.2f, 0.2f, 0.6f),
+            new Vector3 (0.6f, 0.2f, 0.6f),
+            new Vector3 (0.6f, 0.5f, 0.6f),
+            new Vector3 (0.2f, 0.4f, 0.6f),
+
+	        /* Right of cube */
+	        new Vector3 (0.2f, 0.2f, 0.2f),
+            new Vector3 (0.6f, 0.2f, 0.2f),
+            new Vector3 (0.6f, 0.5f, 0.2f),
+            new Vector3 (0.2f, 0.4f, 0.2f),
+	        //****************************************************************************
+	        new Vector3 (0.7f, 0.65f, 0.6f),
+            new Vector3 (0.7f, 0.65f, 0.2f),
+            new Vector3 (1.7f, 0.65f, 0.2f),        //top cover
+	        new Vector3 (1.7f, 0.65f, 0.6f),
+	
+	        //******************MIDDLE BODY************************************
+	        new Vector3 (0.6f, 0.5f, 0.6f),
+            new Vector3 (0.6f, 0.2f, 0.6f),
+            new Vector3 (1.8f, 0.2f, 0.6f),
+            new Vector3 (1.8f, 0.5f, 0.6f),
+
+            new Vector3 (1.8f, 0.2f, 0.6f),
+            new Vector3 (1.8f, 0.2f, 0.2f),
+            new Vector3 (1.8f, 0.5f, 0.2f),
+            new Vector3 (1.8f, 0.5f, 0.6f),
+	        /* bottom of cube*/
+	        new Vector3 (0.6f, 0.2f, 0.6f),
+            new Vector3 (0.6f, 0.2f, 0.2f),
+            new Vector3 (1.8f, 0.2f, 0.2f),
+            new Vector3 (1.8f, 0.2f, 0.6f),
+
+	        /* back of cube.*/
+	        new Vector3 (0.6f, 0.5f, 0.2f),
+            new Vector3 (0.6f, 0.2f, 0.2f),
+            new Vector3 (1.8f, 0.2f, 0.2f),
+            new Vector3 (1.8f, 0.5f, 0.2f),
+
+	        new Vector3 (0.7f, 0.65f, 0.2f),
+            new Vector3 (0.7f, 0.5f, .2f),       //first separation
+	        new Vector3 (0.75f, 0.5f, 0.2f),
+            new Vector3 (0.77f, 0.65f, 0.2f),
+
+            new Vector3 (1.2f, 0.65f, 0.2f),
+            new Vector3 (1.2f, 0.5f, .2f),       //second separation
+	        new Vector3 (1.25f, 0.5f, 0.2f),
+            new Vector3 (1.27f, 0.65f, 0.2f),
+
+            new Vector3 (1.65f, 0.65f, 0.2f),
+            new Vector3 (1.65f, 0.5f, .2f),     //3d separation
+	        new Vector3 (1.7f, 0.5f, 0.2f),
+            new Vector3 (1.7f, 0.65f, 0.2f),
+
+            new Vector3 (0.75f, 0.65f, 0.2f),
+            new Vector3 (0.75f, 0.63f, 0.2f),        //line strip
+	        new Vector3 (1.7f, 0.63f, 0.2f),
+            new Vector3 (1.7f, 0.65f, 0.2f),
+
+            new Vector3 (0.75f, 0.65f, 0.6f),
+            new Vector3 (0.75f, 0.63f, 0.6f),        //line strip
+	        new Vector3 (1.7f, 0.63f, 0.6f),
+            new Vector3 (1.7f, 0.65f, 0.6f),
+
+
+	        new Vector3 (0.7f, 0.65f, 0.6f),
+            new Vector3 (0.7f, 0.5f, .6f),       //first separation
+	        new Vector3 (0.75f, 0.5f, 0.6f),
+            new Vector3 (0.77f, 0.65f, 0.6f),
+
+            new Vector3 (1.2f, 0.65f, 0.6f),
+            new Vector3 (1.2f, 0.5f, .6f),       //second separation
+	        new Vector3 (1.25f, 0.5f, 0.6f),
+            new Vector3 (1.27f, 0.65f, 0.6f),
+
+            new Vector3 (1.65f, 0.65f, 0.6f),
+            new Vector3 (1.65f, 0.5f, .6f),
+            new Vector3 (1.7f, 0.5f, 0.6f), //3d separation
+            new Vector3 (1.7f, 0.65f, 0.6f),
+
+
+
+            });      // right
+
+
             cubeNormals = new VBO<Vector3>(new Vector3[] {
-                new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0), 
-                new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0), 
-                new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), 
-                new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), 
-                new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), 
-                new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0) });
+                new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0),
+                new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0),
+                new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1),
+                new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1),
+                new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0),
+                new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0),
+                new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0),
+                new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0),
+                new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1),
+                new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1),
+                new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0),
+                new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0),
+                new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0),
+                new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0),
+                new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1),
+                new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1),
+                new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0),
+                new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0),
+                new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0)
+            });
             cubeUV = new VBO<Vector2>(new Vector2[] {
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
                 new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
                 new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
                 new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
@@ -70,8 +205,91 @@ namespace OpenGLTutorial8
                 new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
                 new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1) });
 
-            cubeQuads = new VBO<int>(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 }, BufferTarget.ElementArrayBuffer);
+            cubeQuads = new VBO<int>(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,61,63,64,65,66,67,68,69,70,71,72,73,74,75,76,78,79,80,81,82,83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107}, BufferTarget.ElementArrayBuffer);
 
+            window = new VBO<Vector3>(new Vector3[] {
+
+
+
+            new Vector3 (0.77f, 0.63f, 0.2f),
+            new Vector3 (0.75f, 0.5f, 0.2f),        //quad front window
+	        new Vector3 (1.2f, 0.5f, 0.2f),
+            new Vector3 (1.22f, 0.63f, 0.2f),
+
+            new Vector3 (1.27f, 0.63f, .2f),
+            new Vector3 (1.25f, 0.5f, 0.2f),        //quad back window
+	        new Vector3 (1.65f, 0.5f, 0.2f),
+            new Vector3 (1.67f, 0.63f, 0.2f),
+
+
+            new Vector3 (0.77f, 0.63f, 0.6f),
+            new Vector3 (0.75f, 0.5f, 0.6f),        //quad front window
+	        new Vector3 (1.2f, 0.5f, 0.6f),
+            new Vector3 (1.22f, 0.63f, 0.6f),
+
+            new Vector3 (1.27f, 0.63f, 0.6f),
+            new Vector3 (1.25f, 0.5f, 0.6f),        //quad back window
+	        new Vector3 (1.65f, 0.5f, 0.6f),
+            new Vector3 (1.67f, 0.63f, 0.6f),
+
+
+            new Vector3 (0.6f, 0.5f, 0.6f),
+            new Vector3 (0.6f, 0.5f, 0.2f),        //quad f,ront window
+	        new Vector3 (0.7f, 0.65f, 0.2f),
+            new Vector3 (0.7f, 0.65f, 0.6f),
+
+            new Vector3 (1.7f, 0.65f, .6f),
+            new Vector3 (1.7f, 0.65f, 0.2f),        //quad back window
+	        new Vector3 (1.8f, 0.5f, 0.2f),
+            new Vector3 (1.8f, 0.5f, 0.6f),
+
+            new Vector3 (0.6f, 0.5f, 0.6f),
+            new Vector3 (0.7f, 0.65f, 0.6f),       //tri f,ront window
+	        new Vector3 (0.7f, 0.5f, 0.6f),
+
+            new Vector3 (0.6f, 0.5f, 0.2f),
+            new Vector3 (0.7f, 0.65f, 0.2f),       //tri f,ront window
+	        new Vector3 (0.7f, 0.5f, 0.2f),
+            new Vector3 (0.7f, 0.5f, 0.3f),
+
+            new Vector3 (1.7f, 0.65f, 0.2f),
+            new Vector3 (1.8f, 0.5f, 0.2f),       //tri back window
+	        new Vector3 (1.7f, 0.5f, 0.2f),
+            new Vector3 (1.7f, 0.5f, 0.3f),
+
+            new Vector3 (1.7f, 0.65f, 0.6f),
+            new Vector3 (1.8f, 0.5f, 0.6f),       //tri back window
+	        new Vector3 (1.7f, 0.5f, 0.6f),
+            new Vector3 (1.7f, 0.5f, 0.7f)
+
+            });      // right
+
+
+            windowNormals = new VBO<Vector3>(new Vector3[] {
+                new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0),
+                new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0),
+                new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1),
+                new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1),
+                new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0),
+                new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0),
+                new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0),
+                new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0),
+                new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1),
+                new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1)
+            });
+            windowUV = new VBO<Vector2>(new Vector2[] {
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1) });
+
+            windowQuads = new VBO<int>(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35}, BufferTarget.ElementArrayBuffer);
 
             watch = System.Diagnostics.Stopwatch.StartNew();
 
@@ -85,6 +303,7 @@ namespace OpenGLTutorial8
             cubeUV.Dispose();
             cubeQuads.Dispose();
             glassTexture.Dispose();
+            kacaTexture.Dispose();
             program.DisposeChildren = true;
             program.Dispose();
         }
@@ -129,6 +348,21 @@ namespace OpenGLTutorial8
             Gl.BindBuffer(cubeQuads);
             
             Gl.DrawElements(BeginMode.Quads, cubeQuads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
+
+
+            //Draw window
+            Gl.BindTexture(kacaTexture);
+
+            // set up the model matrix and draw the cube
+            program["model_matrix"].SetValue(Matrix4.CreateRotationY(yangle) * Matrix4.CreateRotationX(xangle));
+            program["enable_lighting"].SetValue(lighting);
+
+            Gl.BindBufferToShaderAttribute(window, program, "vertexPosition");
+            Gl.BindBufferToShaderAttribute(windowNormals, program, "vertexNormal");
+            Gl.BindBufferToShaderAttribute(windowUV, program, "vertexUV");
+            Gl.BindBuffer(windowQuads);
+
+            Gl.DrawElements(BeginMode.Quads, windowQuads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
 
             Glut.glutSwapBuffers();
         }
