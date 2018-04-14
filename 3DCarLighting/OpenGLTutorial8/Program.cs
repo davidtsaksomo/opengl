@@ -16,6 +16,8 @@ namespace OpenGLTutorial8
         private static float xangle, yangle;
         private static bool autoRotate, lighting = true, fullscreen = false, alpha = true;
         private static bool left, right, up, down;
+
+        //TODO: bikin slider buat modifikasi nilai-nilai ini
         private static float ambient = 0.3f;
         private static float maxdiffuse = 1f;
 
