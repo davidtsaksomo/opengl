@@ -16,6 +16,9 @@ namespace OpenGLTutorial8
         private static float xangle, yangle;
         private static bool autoRotate, lighting = true, fullscreen = false, alpha = true;
         private static bool left, right, up, down;
+        private static float ambient = 0.3f;
+        private static float maxdiffuse = 1f;
+
 
         static void Main(string[] args)
         {
@@ -499,6 +502,8 @@ namespace OpenGLTutorial8
             // set up the model matrix and draw the cube
             program["model_matrix"].SetValue(Matrix4.CreateRotationY(yangle) * Matrix4.CreateRotationX(xangle));
             program["enable_lighting"].SetValue(lighting);
+            program["max_diffuse"].SetValue(maxdiffuse);
+            program["ambient"].SetValue(ambient);
 
             Gl.BindBufferToShaderAttribute(window, program, "vertexPosition");
             Gl.BindBufferToShaderAttribute(windowNormals, program, "vertexNormal");
@@ -606,6 +611,8 @@ void main(void)
 uniform sampler2D texture;
 uniform vec3 light_direction;
 uniform bool enable_lighting;
+uniform float ambient;
+uniform float max_diffuse;
 
 in vec3 normal;
 in vec2 uv;
@@ -614,8 +621,7 @@ out vec4 fragment;
 
 void main(void)
 {
-    float diffuse = max(dot(normal, light_direction), 0);
-    float ambient = 0.3;
+    float diffuse = max(dot(normal, light_direction), 0) * max_diffuse;
     float lighting = (enable_lighting ? max(diffuse, ambient) : 1);
 
     // add in some blending for tutorial 8 by setting the alpha to 0.5
