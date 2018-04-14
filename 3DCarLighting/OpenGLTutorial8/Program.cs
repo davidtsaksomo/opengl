@@ -8,7 +8,7 @@ namespace OpenGLTutorial8
     {
         private static int width = 1280, height = 720;
         private static ShaderProgram program;
-        private static VBO<Vector3> cube, cubeNormals, window, windowNormals,wheel1,wheel1Normals,wheel2,wheel3,wheel4,wheel11, wheel21, wheel31, wheel41, wheel111, wheel211, wheel311, wheel411, wheel112, wheel212, wheel312, wheel412;
+        private static VBO<Vector3> cube, cubeNormals, window, windowNormals, wheel1, wheel1Normals, wheel2, wheel3, wheel4;
         private static VBO<Vector2> cubeUV, windowUV,wheel1UV;
         private static VBO<int> cubeQuads, windowQuads,wheel1Quads;
         private static Texture glassTexture, kacaTexture, rodaTexture;
@@ -162,25 +162,29 @@ namespace OpenGLTutorial8
 
 
             cubeNormals = new VBO<Vector3>(new Vector3[] {
-                new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0),
+                new Vector3(-0.2f, 1, 0), new Vector3(-0.2f, 1, 0), new Vector3(-0.2f, 1, 0), new Vector3(-0.2f, 1, 0),
                 new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0),
-                new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1),
-                new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1),
                 new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0),
                 new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0),
-                new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0),
-                new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0),
                 new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1),
                 new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1),
-                new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0),
-                new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0),
+
                 new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0),
-                new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0),
                 new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1),
-                new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1),
-                new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0),
                 new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0),
-                new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0)
+                new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0),
+                new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1),
+
+                new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1),
+                new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1),
+                new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1),
+
+                new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1),
+                new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1),
+
+                new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1),
+                new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1),
+                new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1)
             });
             cubeUV = new VBO<Vector2>(new Vector2[] {
                 new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
@@ -242,36 +246,37 @@ namespace OpenGLTutorial8
             new Vector3 (0.6f, 0.5f, 0.6f),
             new Vector3 (0.7f, 0.65f, 0.6f),       //tri f,ront window
 	        new Vector3 (0.7f, 0.5f, 0.6f),
+	        new Vector3 (0.7f, 0.5f, 0.6f),
 
             new Vector3 (0.6f, 0.5f, 0.2f),
             new Vector3 (0.7f, 0.65f, 0.2f),       //tri f,ront window
 	        new Vector3 (0.7f, 0.5f, 0.2f),
-            new Vector3 (0.7f, 0.5f, 0.3f),
+            new Vector3 (0.7f, 0.5f, 0.2f),
 
             new Vector3 (1.7f, 0.65f, 0.2f),
             new Vector3 (1.8f, 0.5f, 0.2f),       //tri back window
 	        new Vector3 (1.7f, 0.5f, 0.2f),
-            new Vector3 (1.7f, 0.5f, 0.3f),
+            new Vector3 (1.7f, 0.5f, 0.2f),
 
             new Vector3 (1.7f, 0.65f, 0.6f),
             new Vector3 (1.8f, 0.5f, 0.6f),       //tri back window
 	        new Vector3 (1.7f, 0.5f, 0.6f),
-            new Vector3 (1.7f, 0.5f, 0.7f)
+            new Vector3 (1.7f, 0.5f, 0.6f)
 
             });      // right
 
 
             windowNormals = new VBO<Vector3>(new Vector3[] {
-                new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0),
-                new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0),
-                new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1),
                 new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1),
-                new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0), new Vector3(-1, 0, 0),
-                new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0), new Vector3(1, 0, 0),
-                new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0), new Vector3(0, 1, 0),
-                new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0), new Vector3(0, -1, 0),
+               new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1),
                 new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1),
-                new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1)
+               new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1),
+                new Vector3(-1, 0.2f, 0), new Vector3(-1, 0.2f, 0), new Vector3(-1, 0.2f, 0), new Vector3(-1, 0.2f, 0),
+                new Vector3(1, 0.2f, 0), new Vector3(1, 0.2f, 0), new Vector3(1, 0.2f, 0), new Vector3(1, 0.2f, 0),
+                  new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1),
+                new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1),
+               new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1), new Vector3(0, 0, -1),
+                new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1), new Vector3(0, 0, 1)
             });
             windowUV = new VBO<Vector2>(new Vector2[] {
                 new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
@@ -286,6 +291,7 @@ namespace OpenGLTutorial8
                 new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1) });
 
             windowQuads = new VBO<int>(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35}, BufferTarget.ElementArrayBuffer);
+
 
             //wheeel-----------------------------------------------------------------------------------------------
             // Number of segments the circle is divided into.
@@ -329,318 +335,6 @@ namespace OpenGLTutorial8
 
             wheel1 = new VBO<Vector3>(coordA);      // right
 
-            // UM --------------------------------------------------------------------------------------
-
-            // Origin.
-            coordIdx = 0;
-            center = new Vector3(0.6f, 0.2f, 0.55f);
-            // Start with vector (1.0f, 0.0f), ...
-
-            coordA[coordIdx++] = new Vector3(center.X + radius/2, center.Y, center.Z);
-            coordA[coordIdx++] = new Vector3(center.X + radius/2, center.Y, center.Z + depth);
-
-            // ... and then rotate it by angInc for each point.
-            xc = radius/2;
-            yc = 0.0f;
-            for (int iDiv = 0; iDiv < DIV_COUNT; ++iDiv)
-            {
-                float xcNew = cosInc * xc - sinInc * yc;
-                yc = sinInc * xc + cosInc * yc;
-                xc = xcNew;
-
-                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z);
-                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z + depth);
-            }
-            // Start with vector (1.0f, 0.0f), ...
-            coordA[coordIdx++] = new Vector3(center.X + radius/2, center.Y, center.Z);
-            coordA[coordIdx++] = new Vector3(center.X + radius/2, center.Y, center.Z + depth);
-
-            wheel11 = new VBO<Vector3>(coordA);      // right
-
-            // Origin.
-            coordIdx = 0;
-            center = new Vector3(1.5f, 0.2f, 0.55f);
-            // Start with vector (1.0f, 0.0f), ...
-
-            coordA[coordIdx++] = new Vector3(center.X + radius / 2, center.Y, center.Z);
-            coordA[coordIdx++] = new Vector3(center.X + radius / 2, center.Y, center.Z + depth);
-
-            // ... and then rotate it by angInc for each point.
-            xc = radius / 2;
-            yc = 0.0f;
-            for (int iDiv = 0; iDiv < DIV_COUNT; ++iDiv)
-            {
-                float xcNew = cosInc * xc - sinInc * yc;
-                yc = sinInc * xc + cosInc * yc;
-                xc = xcNew;
-
-                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z);
-                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z + depth);
-            }
-            // Start with vector (1.0f, 0.0f), ...
-            coordA[coordIdx++] = new Vector3(center.X + radius / 2, center.Y, center.Z);
-            coordA[coordIdx++] = new Vector3(center.X + radius / 2, center.Y, center.Z + depth);
-
-            wheel21 = new VBO<Vector3>(coordA);      // right
-
-            // Origin.
-            coordIdx = 0;
-            center = new Vector3(0.6f, 0.2f, 0.15f);
-            // Start with vector (1.0f, 0.0f), ...
-
-            coordA[coordIdx++] = new Vector3(center.X + radius / 2, center.Y, center.Z);
-            coordA[coordIdx++] = new Vector3(center.X + radius / 2, center.Y, center.Z + depth);
-
-            // ... and then rotate it by angInc for each point.
-            xc = radius / 2;
-            yc = 0.0f;
-            for (int iDiv = 0; iDiv < DIV_COUNT; ++iDiv)
-            {
-                float xcNew = cosInc * xc - sinInc * yc;
-                yc = sinInc * xc + cosInc * yc;
-                xc = xcNew;
-
-                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z);
-                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z + depth);
-            }
-            // Start with vector (1.0f, 0.0f), ...
-            coordA[coordIdx++] = new Vector3(center.X + radius / 2, center.Y, center.Z);
-            coordA[coordIdx++] = new Vector3(center.X + radius / 2, center.Y, center.Z + depth);
-
-            wheel31 = new VBO<Vector3>(coordA);      // right
-                                                     // Origin.
-            coordIdx = 0;
-            center = new Vector3(1.5f, 0.2f, 0.15f);
-            // Start with vector (1.0f, 0.0f), ...
-
-            coordA[coordIdx++] = new Vector3(center.X + radius / 2, center.Y, center.Z);
-            coordA[coordIdx++] = new Vector3(center.X + radius / 2, center.Y, center.Z + depth);
-
-            // ... and then rotate it by angInc for each point.
-            xc = radius / 2;
-            yc = 0.0f;
-            for (int iDiv = 0; iDiv < DIV_COUNT; ++iDiv)
-            {
-                float xcNew = cosInc * xc - sinInc * yc;
-                yc = sinInc * xc + cosInc * yc;
-                xc = xcNew;
-
-                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z);
-                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z + depth);
-            }
-            // Start with vector (1.0f, 0.0f), ...
-            coordA[coordIdx++] = new Vector3(center.X + radius / 2, center.Y, center.Z);
-            coordA[coordIdx++] = new Vector3(center.X + radius / 2, center.Y, center.Z + depth);
-
-            wheel41 = new VBO<Vector3>(coordA);      // right
-
-            // Origin.
-            coordIdx = 0;
-            center = new Vector3(0.6f, 0.2f, 0.55f);
-            // Start with vector (1.0f, 0.0f), ...
-
-            coordA[coordIdx++] = new Vector3(center.X + radius / 4, center.Y, center.Z);
-            coordA[coordIdx++] = new Vector3(center.X + radius / 4, center.Y, center.Z + depth);
-
-            // ... and then rotate it by angInc for each point.
-            xc = radius / 4;
-            yc = 0.0f;
-            for (int iDiv = 0; iDiv < DIV_COUNT; ++iDiv)
-            {
-                float xcNew = cosInc * xc - sinInc * yc;
-                yc = sinInc * xc + cosInc * yc;
-                xc = xcNew;
-
-                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z);
-                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z + depth);
-            }
-            // Start with vector (1.0f, 0.0f), ...
-            coordA[coordIdx++] = new Vector3(center.X + radius / 4, center.Y, center.Z);
-            coordA[coordIdx++] = new Vector3(center.X + radius / 4, center.Y, center.Z + depth);
-
-            wheel111 = new VBO<Vector3>(coordA);      // right
-
-            // Origin.
-            coordIdx = 0;
-            center = new Vector3(1.5f, 0.2f, 0.55f);
-            // Start with vector (1.0f, 0.0f), ...
-
-            coordA[coordIdx++] = new Vector3(center.X + radius / 4, center.Y, center.Z);
-            coordA[coordIdx++] = new Vector3(center.X + radius / 4, center.Y, center.Z + depth);
-
-            // ... and then rotate it by angInc for each point.
-            xc = radius / 4;
-            yc = 0.0f;
-            for (int iDiv = 0; iDiv < DIV_COUNT; ++iDiv)
-            {
-                float xcNew = cosInc * xc - sinInc * yc;
-                yc = sinInc * xc + cosInc * yc;
-                xc = xcNew;
-
-                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z);
-                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z + depth);
-            }
-            // Start with vector (1.0f, 0.0f), ...
-            coordA[coordIdx++] = new Vector3(center.X + radius / 4, center.Y, center.Z);
-            coordA[coordIdx++] = new Vector3(center.X + radius / 4, center.Y, center.Z + depth);
-
-            wheel211 = new VBO<Vector3>(coordA);      // right
-
-            // Origin.
-            coordIdx = 0;
-            center = new Vector3(0.6f, 0.2f, 0.15f);
-            // Start with vector (1.0f, 0.0f), ...
-
-            coordA[coordIdx++] = new Vector3(center.X + radius / 4, center.Y, center.Z);
-            coordA[coordIdx++] = new Vector3(center.X + radius / 4, center.Y, center.Z + depth);
-
-            // ... and then rotate it by angInc for each point.
-            xc = radius / 4;
-            yc = 0.0f;
-            for (int iDiv = 0; iDiv < DIV_COUNT; ++iDiv)
-            {
-                float xcNew = cosInc * xc - sinInc * yc;
-                yc = sinInc * xc + cosInc * yc;
-                xc = xcNew;
-
-                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z);
-                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z + depth);
-            }
-            // Start with vector (1.0f, 0.0f), ...
-            coordA[coordIdx++] = new Vector3(center.X + radius / 4, center.Y, center.Z);
-            coordA[coordIdx++] = new Vector3(center.X + radius / 4, center.Y, center.Z + depth);
-
-            wheel311 = new VBO<Vector3>(coordA);      // right
-                                                      // Origin.
-            coordIdx = 0;
-            center = new Vector3(1.5f, 0.2f, 0.15f);
-            // Start with vector (1.0f, 0.0f), ...
-
-            coordA[coordIdx++] = new Vector3(center.X + radius / 4, center.Y, center.Z);
-            coordA[coordIdx++] = new Vector3(center.X + radius / 4, center.Y, center.Z + depth);
-
-            // ... and then rotate it by angInc for each point.
-            xc = radius / 4;
-            yc = 0.0f;
-            for (int iDiv = 0; iDiv < DIV_COUNT; ++iDiv)
-            {
-                float xcNew = cosInc * xc - sinInc * yc;
-                yc = sinInc * xc + cosInc * yc;
-                xc = xcNew;
-
-                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z);
-                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z + depth);
-            }
-            // Start with vector (1.0f, 0.0f), ...
-            coordA[coordIdx++] = new Vector3(center.X + radius / 4, center.Y, center.Z);
-            coordA[coordIdx++] = new Vector3(center.X + radius / 4, center.Y, center.Z + depth);
-
-            wheel411 = new VBO<Vector3>(coordA);      // right
-
-            // Origin.
-            coordIdx = 0;
-            center = new Vector3(0.6f, 0.2f, 0.55f);
-            // Start with vector (1.0f, 0.0f), ...
-
-            coordA[coordIdx++] = new Vector3(center.X + radius / 1.5f, center.Y, center.Z);
-            coordA[coordIdx++] = new Vector3(center.X + radius / 1.5f, center.Y, center.Z + depth);
-
-            // ... and then rotate it by angInc for each point.
-            xc = radius / 1.5f;
-            yc = 0.0f;
-            for (int iDiv = 0; iDiv < DIV_COUNT; ++iDiv)
-            {
-                float xcNew = cosInc * xc - sinInc * yc;
-                yc = sinInc * xc + cosInc * yc;
-                xc = xcNew;
-
-                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z);
-                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z + depth);
-            }
-            // Start with vector (1.0f, 0.0f), ...
-            coordA[coordIdx++] = new Vector3(center.X + radius / 1.5f, center.Y, center.Z);
-            coordA[coordIdx++] = new Vector3(center.X + radius / 1.5f, center.Y, center.Z + depth);
-
-            wheel112 = new VBO<Vector3>(coordA);      // right
-
-            // Origin.
-            coordIdx = 0;
-            center = new Vector3(1.5f, 0.2f, 0.55f);
-            // Start with vector (1.0f, 0.0f), ...
-
-            coordA[coordIdx++] = new Vector3(center.X + radius / 1.5f, center.Y, center.Z);
-            coordA[coordIdx++] = new Vector3(center.X + radius / 1.5f, center.Y, center.Z + depth);
-
-            // ... and then rotate it by angInc for each point.
-            xc = radius / 1.5f;
-            yc = 0.0f;
-            for (int iDiv = 0; iDiv < DIV_COUNT; ++iDiv)
-            {
-                float xcNew = cosInc * xc - sinInc * yc;
-                yc = sinInc * xc + cosInc * yc;
-                xc = xcNew;
-
-                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z);
-                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z + depth);
-            }
-            // Start with vector (1.0f, 0.0f), ...
-            coordA[coordIdx++] = new Vector3(center.X + radius / 1.5f, center.Y, center.Z);
-            coordA[coordIdx++] = new Vector3(center.X + radius / 1.5f, center.Y, center.Z + depth);
-
-            wheel212 = new VBO<Vector3>(coordA);      // right
-
-            // Origin.
-            coordIdx = 0;
-            center = new Vector3(0.6f, 0.2f, 0.15f);
-            // Start with vector (1.0f, 0.0f), ...
-
-            coordA[coordIdx++] = new Vector3(center.X + radius / 1.5f, center.Y, center.Z);
-            coordA[coordIdx++] = new Vector3(center.X + radius / 1.5f, center.Y, center.Z + depth);
-
-            // ... and then rotate it by angInc for each point.
-            xc = radius / 1.5f;
-            yc = 0.0f;
-            for (int iDiv = 0; iDiv < DIV_COUNT; ++iDiv)
-            {
-                float xcNew = cosInc * xc - sinInc * yc;
-                yc = sinInc * xc + cosInc * yc;
-                xc = xcNew;
-
-                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z);
-                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z + depth);
-            }
-            // Start with vector (1.0f, 0.0f), ...
-            coordA[coordIdx++] = new Vector3(center.X + radius / 1.5f, center.Y, center.Z);
-            coordA[coordIdx++] = new Vector3(center.X + radius / 1.5f, center.Y, center.Z + depth);
-
-            wheel312 = new VBO<Vector3>(coordA);      // right
-                                                      // Origin.
-            coordIdx = 0;
-            center = new Vector3(1.5f, 0.2f, 0.15f);
-            // Start with vector (1.0f, 0.0f), ...
-
-            coordA[coordIdx++] = new Vector3(center.X + radius / 1.5f, center.Y, center.Z);
-            coordA[coordIdx++] = new Vector3(center.X + radius / 1.5f, center.Y, center.Z + depth);
-
-            // ... and then rotate it by angInc for each point.
-            xc = radius / 1.5f;
-            yc = 0.0f;
-            for (int iDiv = 0; iDiv < DIV_COUNT; ++iDiv)
-            {
-                float xcNew = cosInc * xc - sinInc * yc;
-                yc = sinInc * xc + cosInc * yc;
-                xc = xcNew;
-
-                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z);
-                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z + depth);
-            }
-            // Start with vector (1.0f, 0.0f), ...
-            coordA[coordIdx++] = new Vector3(center.X + radius / 1.5f, center.Y, center.Z);
-            coordA[coordIdx++] = new Vector3(center.X + radius / 1.5f, center.Y, center.Z + depth);
-
-            wheel412 = new VBO<Vector3>(coordA);      // right
-
-            // UM --------------------------------------------------------------------------------------
 
             // Origin.
             coordIdx = 0;
@@ -820,34 +514,6 @@ namespace OpenGLTutorial8
             Gl.BindBufferToShaderAttribute(wheel1Normals, program, "vertexNormal");
             Gl.BindBufferToShaderAttribute(wheel1UV, program, "vertexUV");
             Gl.BindBuffer(wheel1Quads);
-
-            Gl.DrawElements(BeginMode.TriangleStrip, wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
-            Gl.BindBufferToShaderAttribute(wheel11, program, "vertexPosition");
-            Gl.DrawElements(BeginMode.TriangleStrip, wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
-            Gl.BindBufferToShaderAttribute(wheel21, program, "vertexPosition");
-            Gl.DrawElements(BeginMode.TriangleStrip, wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
-            Gl.BindBufferToShaderAttribute(wheel31, program, "vertexPosition");
-            Gl.DrawElements(BeginMode.TriangleStrip, wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
-            Gl.BindBufferToShaderAttribute(wheel41, program, "vertexPosition");
-
-            Gl.DrawElements(BeginMode.TriangleStrip, wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
-            Gl.BindBufferToShaderAttribute(wheel111, program, "vertexPosition");
-            Gl.DrawElements(BeginMode.TriangleStrip, wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
-            Gl.BindBufferToShaderAttribute(wheel211, program, "vertexPosition");
-            Gl.DrawElements(BeginMode.TriangleStrip, wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
-            Gl.BindBufferToShaderAttribute(wheel311, program, "vertexPosition");
-            Gl.DrawElements(BeginMode.TriangleStrip, wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
-            Gl.BindBufferToShaderAttribute(wheel411, program, "vertexPosition");
-
-            Gl.DrawElements(BeginMode.TriangleStrip, wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
-            Gl.BindBufferToShaderAttribute(wheel112, program, "vertexPosition");
-            Gl.DrawElements(BeginMode.TriangleStrip, wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
-            Gl.BindBufferToShaderAttribute(wheel212, program, "vertexPosition");
-            Gl.DrawElements(BeginMode.TriangleStrip, wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
-            Gl.BindBufferToShaderAttribute(wheel312, program, "vertexPosition");
-            Gl.DrawElements(BeginMode.TriangleStrip, wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
-            Gl.BindBufferToShaderAttribute(wheel412, program, "vertexPosition");
-
             Gl.DrawElements(BeginMode.TriangleStrip, wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
             Gl.BindBufferToShaderAttribute(wheel2, program, "vertexPosition");
             Gl.DrawElements(BeginMode.TriangleStrip, wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
