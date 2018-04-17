@@ -25,7 +25,6 @@ namespace OpenGLTutorial8
         private static float ambient = 0.3f;
         private static float maxdiffuse = 1f;
 
-
         static void Main(string[] args)
         {
             Glut.glutInit();
@@ -38,6 +37,7 @@ namespace OpenGLTutorial8
 
             Glut.glutKeyboardFunc(OnKeyboardDown);
             Glut.glutKeyboardUpFunc(OnKeyboardUp);
+            Glut.glutMouseWheelFunc(MouseWheel);
 
             Glut.glutCloseFunc(OnClose);
             Glut.glutReshapeFunc(OnReshape);
@@ -458,6 +458,7 @@ namespace OpenGLTutorial8
             rodaTexture.Dispose();
             program.DisposeChildren = true;
             program.Dispose();
+
         }
 
         private static void OnDisplay()
@@ -590,7 +591,7 @@ namespace OpenGLTutorial8
             else if (key == 'a') left = false;
             else if (key == ' ') autoRotate = !autoRotate;
             else if (key == 'l') lighting = !lighting;
-            else if (key == 'f')
+            else if (key == 'z')
             {
                 fullscreen = !fullscreen;
                 if (fullscreen) Glut.glutFullScreen();
@@ -612,6 +613,23 @@ namespace OpenGLTutorial8
                 {
                     Gl.Disable(EnableCap.Blend);
                     Gl.Enable(EnableCap.DepthTest);
+                }
+            }
+        }
+
+        private static void MouseWheel(int wheel, int direction, int x, int y)
+        {
+            if (direction > 0)
+            {
+                if (maxdiffuse <= maximumDiffuse)
+                {
+                    maxdiffuse = maxdiffuse + 0.1f;
+                }
+            } else
+            {
+                if (maxdiffuse >= minimumDiffuse)
+                {
+                    maxdiffuse = maxdiffuse - 0.1f;
                 }
             }
         }
