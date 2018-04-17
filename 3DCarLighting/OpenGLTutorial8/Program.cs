@@ -17,6 +17,10 @@ namespace OpenGLTutorial8
         private static bool autoRotate, lighting = true, fullscreen = false, alpha = true;
         private static bool left, right, up, down;
 
+        private static float maximumAmbient = 1f;
+        private static float minimumAmbient = 0f;
+        private static float maximumDiffuse = 5f;
+        private static float minimumDiffuse = 0f;
         //TODO: bikin slider buat modifikasi nilai-nilai ini
         private static float ambient = 0.3f;
         private static float maxdiffuse = 1f;
@@ -547,6 +551,34 @@ namespace OpenGLTutorial8
             else if (key == 's') down = true;
             else if (key == 'd') right = true;
             else if (key == 'a') left = true;
+            else if (key == 'p')
+            {
+                if (maxdiffuse <= maximumDiffuse)
+                {
+                    maxdiffuse = maxdiffuse + 0.1f;
+                }
+            }
+            else if (key == 'o')
+            {
+                if (maxdiffuse >= minimumDiffuse)
+                {
+                    maxdiffuse = maxdiffuse - 0.1f;
+                }
+            }
+            else if (key == ']')
+            {
+                if (ambient <= maximumAmbient)
+                {
+                    ambient = ambient + 0.05f;
+                }
+            }
+            else if (key == '[')
+            {
+                if (ambient >= minimumAmbient)
+                {
+                    ambient = ambient - 0.05f;
+                }
+            }
             else if (key == 27) Glut.glutLeaveMainLoop();
         }
 
