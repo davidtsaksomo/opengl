@@ -8,18 +8,18 @@ namespace OpenGLTutorial8
     {
         private static int width = 1280, height = 720;
         private static ShaderProgram program;
-        private static VBO<Vector3> cube, cubeNormals, window, windowNormals, wheel1, wheel1Normals, wheel2, wheel3, wheel4;
+        private static VBO<Vector3> cube, cubeNormals, window, windowNormals, wheel1, wheel1Normals, wheel2Normals, wheel2, wheel3, wheel4, velg1, velg2, velg3, velg4;
         private static VBO<Vector2> cubeUV, windowUV,wheel1UV;
         private static VBO<int> cubeQuads, windowQuads,wheel1Quads;
-        private static Texture glassTexture, kacaTexture, rodaTexture;
+        private static Texture glassTexture, kacaTexture, rodaTexture,velgTexture;
         private static System.Diagnostics.Stopwatch watch;
         private static float xangle, yangle;
         private static bool autoRotate, lighting = true, fullscreen = false, alpha = true;
         private static bool left, right, up, down;
 
-        private static float maximumAmbient = 1f;
+        private static float maximumAmbient = 10f;
         private static float minimumAmbient = 0f;
-        private static float maximumDiffuse = 5f;
+        private static float maximumDiffuse = 10f;
         private static float minimumDiffuse = 0f;
         //TODO: bikin slider buat modifikasi nilai-nilai ini
         private static float ambient = 0.3f;
@@ -58,6 +58,7 @@ namespace OpenGLTutorial8
             glassTexture = new Texture("glass.bmp");
             kacaTexture = new Texture("kaca.bmp");
             rodaTexture = new Texture("tire.bmp");
+            velgTexture = new Texture("velg.bmp");
 
             cube = new VBO<Vector3>(new Vector3[] {
 
@@ -344,7 +345,6 @@ namespace OpenGLTutorial8
 
             wheel1 = new VBO<Vector3>(coordA);      // right
 
-
             // Origin.
             coordIdx = 0;
             center = new Vector3(1.5f, 0.2f, 0.55f);
@@ -422,11 +422,120 @@ namespace OpenGLTutorial8
 
             wheel4 = new VBO<Vector3>(coordA);      // right
 
+            //-------------------------------VELGGGGGG--------------------------------------------------------------------
+            // Origin.
+            coordIdx = 0;
+            center = new Vector3(0.6f, 0.2f, 0.55f);
+            // Start with vector (1.0f, 0.0f), ...
+
+            //coordA[coordIdx++] = new Vector3(center.X + radius, center.Y, center.Z);
+            coordA[coordIdx++] = new Vector3(center.X + radius, center.Y, center.Z + depth);
+
+            // ... and then rotate it by angInc for each point.
+            xc = radius;
+            yc = 0.0f;
+            for (int iDiv = 0; iDiv < (DIV_COUNT * 2) + 2; ++iDiv)
+            {
+                float xcNew = cosInc * xc - sinInc * yc;
+                yc = sinInc * xc + cosInc * yc;
+                xc = xcNew;
+
+                // coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z);
+                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z + depth);
+            }
+            // Start with vector (1.0f, 0.0f), ...
+            //  coordA[coordIdx++] = new Vector3(center.X + radius, center.Y, center.Z);
+            coordA[coordIdx++] = new Vector3(center.X + radius, center.Y, center.Z + depth);
+
+            velg1 = new VBO<Vector3>(coordA);      // right
+
+            // Origin.
+            coordIdx = 0;
+            center = new Vector3(1.5f, 0.2f, 0.55f);
+            // Start with vector (1.0f, 0.0f), ...
+
+            //coordA[coordIdx++] = new Vector3(center.X + radius, center.Y, center.Z);
+           coordA[coordIdx++] = new Vector3(center.X + radius, center.Y, center.Z + depth);
+
+            // ... and then rotate it by angInc for each point.
+            xc = radius;
+            yc = 0.0f;
+            for (int iDiv = 0; iDiv < (DIV_COUNT*2)+2; ++iDiv)
+            {
+                float xcNew = cosInc * xc - sinInc * yc;
+                yc = sinInc * xc + cosInc * yc;
+                xc = xcNew;
+
+               // coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z);
+                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z + depth);
+            }
+            // Start with vector (1.0f, 0.0f), ...
+          //  coordA[coordIdx++] = new Vector3(center.X + radius, center.Y, center.Z);
+            coordA[coordIdx++] = new Vector3(center.X + radius, center.Y, center.Z + depth);
+
+            velg2 = new VBO<Vector3>(coordA);      // right
+
+            // Origin.
+            coordIdx = 0;
+            center = new Vector3(0.6f, 0.2f, 0.15f);
+            // Start with vector (1.0f, 0.0f), ...
+
+            coordA[coordIdx++] = new Vector3(center.X + radius, center.Y, center.Z);
+            //coordA[coordIdx++] = new Vector3(center.X + radius, center.Y, center.Z + depth);
+
+            // ... and then rotate it by angInc for each point.
+            xc = radius;
+            yc = 0.0f;
+            for (int iDiv = 0; iDiv < (DIV_COUNT*2)+2; ++iDiv)
+            {
+                float xcNew = cosInc * xc - sinInc * yc;
+                yc = sinInc * xc + cosInc * yc;
+                xc = xcNew;
+
+                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z);
+              //  coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z + depth);
+            }
+            // Start with vector (1.0f, 0.0f), ...
+            coordA[coordIdx++] = new Vector3(center.X + radius, center.Y, center.Z);
+            //coordA[coordIdx++] = new Vector3(center.X + radius, center.Y, center.Z + depth);
+
+            velg3 = new VBO<Vector3>(coordA);      // right
+                                                    // Origin.
+            coordIdx = 0;
+            center = new Vector3(1.5f, 0.2f, 0.15f);
+            // Start with vector (1.0f, 0.0f), ...
+
+            coordA[coordIdx++] = new Vector3(center.X + radius, center.Y, center.Z);
+            //coordA[coordIdx++] = new Vector3(center.X + radius, center.Y, center.Z + depth);
+
+            // ... and then rotate it by angInc for each point.
+            xc = radius;
+            yc = 0.0f;
+            for (int iDiv = 0; iDiv < (DIV_COUNT*2)+2; ++iDiv)
+            {
+                float xcNew = cosInc * xc - sinInc * yc;
+                yc = sinInc * xc + cosInc * yc;
+                xc = xcNew;
+
+                coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z);
+             //   coordA[coordIdx++] = new Vector3(xc + center.X, yc + center.Y, center.Z + depth);
+            }
+            // Start with vector (1.0f, 0.0f), ...
+            coordA[coordIdx++] = new Vector3(center.X + radius, center.Y, center.Z);
+           // coordA[coordIdx++] = new Vector3(center.X + radius, center.Y, center.Z + depth);
+
+            velg4 = new VBO<Vector3>(coordA);      // right
+
+            //---------------------------------------------------------------------------------------------------
+
+
             int[] quads = new int[(DIV_COUNT + 2) * 2];
-            Vector3[] normals = new Vector3[(DIV_COUNT + 2) * 2];
+            Vector3[] leftnormals = new Vector3[(DIV_COUNT + 2) * 2];
+            Vector3[] rightnormals = new Vector3[(DIV_COUNT + 2) * 2];
             for (int i = 0; i < (DIV_COUNT + 2) * 2; i++)
             {
-                normals[i] = new Vector3(0, 1, 0);
+                leftnormals[i] = new Vector3(0, 0, 1);
+                rightnormals[i] = new Vector3(0, 0, -1);
                 quads[i] = i;
             }
 
@@ -438,7 +547,8 @@ namespace OpenGLTutorial8
                 UVs[i + 2] = new Vector2(1, 1);
                 UVs[i + 3] = new Vector2(0, 1);
             }
-            wheel1Normals = new VBO<Vector3>(normals);
+            wheel1Normals = new VBO<Vector3>(leftnormals);
+            wheel2Normals = new VBO<Vector3>(rightnormals);
             wheel1UV = new VBO<Vector2>(UVs);
             wheel1Quads = new VBO<int>(quads, BufferTarget.ElementArrayBuffer);
 
@@ -455,6 +565,7 @@ namespace OpenGLTutorial8
             cubeQuads.Dispose();
             glassTexture.Dispose();
             kacaTexture.Dispose();
+            velgTexture.Dispose();
             rodaTexture.Dispose();
             program.DisposeChildren = true;
             program.Dispose();
@@ -529,11 +640,28 @@ namespace OpenGLTutorial8
             Gl.DrawElements(BeginMode.TriangleStrip, wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
             Gl.BindBufferToShaderAttribute(wheel2, program, "vertexPosition");
             Gl.DrawElements(BeginMode.TriangleStrip, wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
+            Gl.BindBufferToShaderAttribute(wheel2Normals, program, "vertexNormal");
+
             Gl.BindBufferToShaderAttribute(wheel3, program, "vertexPosition");
             Gl.DrawElements(BeginMode.TriangleStrip, wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
             Gl.BindBufferToShaderAttribute(wheel4, program, "vertexPosition");
             Gl.DrawElements(BeginMode.TriangleStrip, wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
 
+            //Gl.BindTexture(velgTexture);
+            Gl.BindBufferToShaderAttribute(wheel1Normals, program, "vertexNormal");
+
+            Gl.BindBufferToShaderAttribute(velg1, program, "vertexPosition");
+            Gl.DrawElements(BeginMode.TriangleFan, wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
+            Gl.BindBufferToShaderAttribute(velg2, program, "vertexPosition");
+
+            Gl.DrawElements(BeginMode.TriangleFan, wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
+            Gl.BindBufferToShaderAttribute(wheel2Normals, program, "vertexNormal");
+
+
+            Gl.BindBufferToShaderAttribute(velg3, program, "vertexPosition");
+            Gl.DrawElements(BeginMode.TriangleFan, wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
+            Gl.BindBufferToShaderAttribute(velg4, program, "vertexPosition");
+            Gl.DrawElements(BeginMode.TriangleFan, wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
             Glut.glutSwapBuffers();
         }
 
