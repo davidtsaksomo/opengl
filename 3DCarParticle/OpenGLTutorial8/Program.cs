@@ -7,6 +7,7 @@ namespace CarParticle
     class Program
     {
         private static CarModel carmodel;
+        private static Smoke smoke;
         private static Rain rain;
 
         private static int width = 1280, height = 720;
@@ -59,8 +60,9 @@ namespace CarParticle
 
             carmodel = new CarModel();
             rain = new Rain();
-            watch = System.Diagnostics.Stopwatch.StartNew();
+            smoke = new Smoke();
 
+            watch = System.Diagnostics.Stopwatch.StartNew();
             Glut.glutMainLoop();
         }
 
@@ -75,6 +77,7 @@ namespace CarParticle
             CarModel.rodaTexture.Dispose();
 
             Rain.OnClose();
+            Smoke.OnClose();
             program.DisposeChildren = true;
             program.Dispose();
 
@@ -197,6 +200,37 @@ namespace CarParticle
             Gl.DrawElements(BeginMode.Points, Rain.particlePoints.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
             Gl.Disable(EnableCap.PointSprite);
 
+
+            //Draw Smoke
+            // make sure the shader program and texture are being used
+            Gl.UseProgram(Smoke.program.ProgramID);
+            Gl.BindTexture(Smoke.particleTexture);
+            Smoke.program["model_matrix"].SetValue(Matrix4.CreateRotationY(yangle) * Matrix4.CreateRotationX(xangle));
+
+            // update our particle list
+            for (int i = 0; i < Smoke.particles.Count; i++)
+            {
+                Smoke.particles[i].Update(deltaTime);
+                //if (particles[i].Life < 0) particles[i] = new Particle(Vector3.Zero);
+                if (Smoke.particles[i].Life < 0) Smoke.particles[i] = new Smoke.Particle(new Vector3(1.8f, 0.2f, 0.3f));
+                Smoke.particlePositions[i] = Smoke.particles[i].Position;
+            }
+
+            // delete our previous particle positions (if applicable) and then create a new VBO
+            if (Smoke.particleVertices != null) Smoke.particleVertices.Dispose();
+            Smoke.particleVertices = new VBO<Vector3>(Smoke.particlePositions);
+
+            // bind the VBOs to their shader attributes
+            Gl.BindBufferToShaderAttribute(Smoke.particleVertices, Smoke.program, "vertexPosition");
+            Gl.BindBufferToShaderAttribute(Smoke.particleColors, Smoke.program, "vertexColor");
+            Gl.BindBuffer(Smoke.particlePoints);
+
+            // enable point sprite mode (which enables the gl_PointCoord value)
+            Gl.Enable(EnableCap.PointSprite);
+            Gl.DrawElements(BeginMode.Points, Smoke.particlePoints.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
+            Gl.Disable(EnableCap.PointSprite);
+
+
             Glut.glutSwapBuffers();
 
         }
@@ -299,6 +333,10 @@ namespace CarParticle
                 Rain.rainbow = !Rain.rainbow;
                 Rain.program.Use();
                 Rain.program["static_colors"].SetValue(Rain.rainbow);
+
+                Smoke.rainbow = !Smoke.rainbow;
+                Smoke.program.Use();
+                Smoke.program["static_colors"].SetValue(Smoke.rainbow);
             }
         }
 
