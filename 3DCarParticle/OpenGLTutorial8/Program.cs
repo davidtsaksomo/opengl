@@ -1,11 +1,13 @@
 ﻿using System;
 using Tao.FreeGlut;
 using OpenGL;
+using WMPLib;
 
 namespace CarParticle
 {
     class Program
     {
+        
         private static CarModel carmodel;
         private static Smoke smoke;
         private static Rain rain;
@@ -25,9 +27,13 @@ namespace CarParticle
         //TODO: bikin slider buat modifikasi nilai-nilai ini
         private static float ambient = 0.3f;
         private static float maxdiffuse = 1f;
+        private static WMPLib.WindowsMediaPlayer wplayer = new WMPLib.WindowsMediaPlayer();
 
         static void Main(string[] args)
         {
+            wplayer.URL = "song.mp3";
+            wplayer.controls.stop();
+            
             Glut.glutInit();
             Glut.glutInitDisplayMode(Glut.GLUT_DOUBLE | Glut.GLUT_DEPTH | Glut.GLUT_MULTISAMPLE);
             Glut.glutInitWindowSize(width, height);
@@ -63,6 +69,8 @@ namespace CarParticle
 
             watch = System.Diagnostics.Stopwatch.StartNew();
             Glut.glutMainLoop();
+            
+
         }
 
         private static void OnClose()
@@ -92,6 +100,7 @@ namespace CarParticle
             watch.Stop();
             float deltaTime = (float)watch.ElapsedTicks / System.Diagnostics.Stopwatch.Frequency;
             watch.Restart();
+            Console.WriteLine("FPS : " + 1f / deltaTime);
 
             // perform rotation of the cube depending on the keyboard state
             if (autoRotate)
@@ -296,7 +305,14 @@ namespace CarParticle
             else if (key == 's') down = false;
             else if (key == 'd') right = false;
             else if (key == 'a') left = false;
-            else if (key == ' ') autoRotate = !autoRotate;
+            else if (key == ' ')
+            {
+                autoRotate = !autoRotate;
+                if (autoRotate)
+                    wplayer.controls.play();
+                else
+                    wplayer.controls.stop();
+            }
             else if (key == 'l') lighting = !lighting;
             else if (key == 'z')
             {
