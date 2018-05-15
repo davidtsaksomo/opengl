@@ -43,11 +43,10 @@ namespace CarParticle
             Glut.glutCloseFunc(OnClose);
             Glut.glutReshapeFunc(OnReshape);
 
-            Gl.Disable(EnableCap.DepthTest);
-            Gl.Enable(EnableCap.Blend);
+            Gl.Enable(EnableCap.DepthTest);
             Gl.Enable(EnableCap.Multisample);
             Gl.Enable(EnableCap.ProgramPointSize);
-            Gl.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            Gl.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.One);
 
             program = new ShaderProgram(VertexShader, FragmentShader);
 
@@ -108,10 +107,13 @@ namespace CarParticle
             // set up the viewport and clear the previous depth and color buffers
             Gl.Viewport(0, 0, width, height);
             Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            Gl.ClearColor(255f/255,255f/255,255f/255,255f/255);
+            //Gl.ClearColor(255f/255,255f/255,255f/255,255f/255);
             // make sure the shader program and texture are being used
             Gl.UseProgram(program);
             Gl.BindTexture(CarModel.bodyTexture);
+            Gl.Disable(EnableCap.Blend);
+            Gl.Enable(EnableCap.DepthTest);
+
 
             // set up the model matrix and draw the cube
             program["model_matrix"].SetValue(Matrix4.CreateRotationY(yangle)  * Matrix4.CreateRotationX(xangle));
@@ -170,6 +172,8 @@ namespace CarParticle
             Gl.DrawElements(BeginMode.TriangleFan, CarModel.wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
             Gl.BindBufferToShaderAttribute(CarModel.velg4, program, "vertexPosition");
             Gl.DrawElements(BeginMode.TriangleFan, CarModel.wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
+            Gl.Enable(EnableCap.Blend);
+            Gl.Disable(EnableCap.DepthTest);
 
             //Draw Rain
             // make sure the shader program and texture are being used
@@ -400,7 +404,7 @@ void main(void)
     float lighting = (enable_lighting ? max(diffuse, ambient) : 1);
 
     // add in some blending for tutorial 8 by setting the alpha to 0.5
-    fragment = vec4(lighting * texture2D(texture, uv).xyz, 0.5);
+    fragment = vec4(lighting * texture2D(texture, uv).xyz, 1);
 }
 ";
     }

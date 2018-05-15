@@ -47,7 +47,7 @@ namespace CarParticle
             // set up the particleColors, which we'll just keep static
             Vector3[] colors = new Vector3[particleCount];
             //for (int i = 0; i < colors.Length; i++) colors[i] = new Vector3((float)generator.NextDouble(), (float)generator.NextDouble(), (float)generator.NextDouble());
-            for (int i = 0; i < colors.Length; i++) colors[i] = new Vector3(0f, 0f, 0f);
+            for (int i = 0; i < colors.Length; i++) colors[i] = new Vector3(1f,1f, 1f);
             particleColors = new VBO<Vector3>(colors);
 
             // build up our first batch of 1000 particles and 1000 static colors

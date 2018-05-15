@@ -38,7 +38,7 @@ namespace CarParticle
             program["static_colors"].SetValue(true);
 
             // load the particle texture
-            particleTexture = new Texture("smoke.png");
+            particleTexture = new Texture("smoke.bmp");
 
             // set up the particlePoints VBO, which will stay constant
             int[] points = new int[particleCount];
@@ -48,7 +48,7 @@ namespace CarParticle
             // set up the particleColors, which we'll just keep static
             Vector3[] colors = new Vector3[particleCount];
             //for (int i = 0; i < colors.Length; i++) colors[i] = new Vector3((float)generator.NextDouble(), (float)generator.NextDouble(), (float)generator.NextDouble());
-            for (int i = 0; i < colors.Length; i++) colors[i] = new Vector3(0.2f, 0.2f, 0.2f);
+            for (int i = 0; i < colors.Length; i++) colors[i] = new Vector3(0.5f, 0.5f, 0.5f);
             particleColors = new VBO<Vector3>(colors);
 
             // build up our first batch of 1000 particles and 1000 static colors
@@ -111,10 +111,10 @@ void main(void)
    
     if (vertexPosition.y > 1) {
         gl_PointSize = 0;
-    } else if (vertexPosition.y > 0) {
-        gl_PointSize = 50;
-    } else {
+    } else if (vertexPosition.y > 0.5) {
         gl_PointSize = 25;
+    } else {
+        gl_PointSize = 50;
     } 
 
     gl_Position = projection_matrix * view_matrix * model_matrix * vec4(vertexPosition.xyz, 1);
