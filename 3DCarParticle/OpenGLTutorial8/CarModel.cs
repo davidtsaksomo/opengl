@@ -2,7 +2,7 @@
 using Tao.FreeGlut;
 using OpenGL;
 
-namespace OpenGLTutorial8
+namespace CarParticle
 {
     public class CarModel
     {

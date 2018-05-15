@@ -2,7 +2,7 @@
 using Tao.FreeGlut;
 using OpenGL;
 
-namespace OpenGLTutorial8
+namespace CarParticle
 {
     class Program
     {
@@ -20,16 +20,23 @@ namespace OpenGLTutorial8
         private static float minimumAmbient = 0f;
         private static float maximumDiffuse = 10f;
         private static float minimumDiffuse = 0f;
-        //TODO: bikin slider buat modifikasi nilai-nilai ini
+
         private static float ambient = 0.3f;
         private static float maxdiffuse = 1f;
+
+        //Rain
+        private static List<Particle> particles = new List<Particle>();
+        private static int particleCount = 2000;
+        private static Vector3[] particlePositions = new Vector3[particleCount];
+        private static Random generator = new Random();
+
 
         static void Main(string[] args)
         {
             Glut.glutInit();
             Glut.glutInitDisplayMode(Glut.GLUT_DOUBLE | Glut.GLUT_DEPTH);
             Glut.glutInitWindowSize(width, height);
-            Glut.glutCreateWindow("Texture 3D Car");
+            Glut.glutCreateWindow("3D Car Particle");
 
             Glut.glutIdleFunc(OnRenderFrame);
             Glut.glutDisplayFunc(OnDisplay);
@@ -43,6 +50,8 @@ namespace OpenGLTutorial8
 
             Gl.Disable(EnableCap.DepthTest);
             Gl.Enable(EnableCap.Blend);
+            Gl.Enable(EnableCap.ProgramPointSize);
+            Gl.Enable(EnableCap.Multisample);
             Gl.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
             program = new ShaderProgram(VertexShader, FragmentShader);
@@ -55,7 +64,6 @@ namespace OpenGLTutorial8
             program["enable_lighting"].SetValue(lighting);
 
             carmodel = new CarModel();
-
             watch = System.Diagnostics.Stopwatch.StartNew();
 
             Glut.glutMainLoop();
@@ -72,6 +80,8 @@ namespace OpenGLTutorial8
             CarModel.rodaTexture.Dispose();
             program.DisposeChildren = true;
             program.Dispose();
+
+
 
         }
 

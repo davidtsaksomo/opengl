@@ -2,11 +2,12 @@
 using Tao.FreeGlut;
 using OpenGL;
 
-namespace OpenGLTutorial8
+namespace CarParticle
 {
     class Program
     {
         private static CarModel carmodel;
+        private static Rain rain;
 
         private static int width = 1280, height = 720;
         private static ShaderProgram program;
@@ -27,7 +28,7 @@ namespace OpenGLTutorial8
         static void Main(string[] args)
         {
             Glut.glutInit();
-            Glut.glutInitDisplayMode(Glut.GLUT_DOUBLE | Glut.GLUT_DEPTH);
+            Glut.glutInitDisplayMode(Glut.GLUT_DOUBLE | Glut.GLUT_DEPTH | Glut.GLUT_MULTISAMPLE);
             Glut.glutInitWindowSize(width, height);
             Glut.glutCreateWindow("Texture 3D Car");
 
@@ -43,6 +44,8 @@ namespace OpenGLTutorial8
 
             Gl.Disable(EnableCap.DepthTest);
             Gl.Enable(EnableCap.Blend);
+            Gl.Enable(EnableCap.Multisample);
+            Gl.Enable(EnableCap.ProgramPointSize);
             Gl.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
             program = new ShaderProgram(VertexShader, FragmentShader);
@@ -55,7 +58,7 @@ namespace OpenGLTutorial8
             program["enable_lighting"].SetValue(lighting);
 
             carmodel = new CarModel();
-
+            rain = new Rain();
             watch = System.Diagnostics.Stopwatch.StartNew();
 
             Glut.glutMainLoop();
@@ -70,6 +73,8 @@ namespace OpenGLTutorial8
             CarModel.bodyTexture.Dispose();
             CarModel.kacaTexture.Dispose();
             CarModel.rodaTexture.Dispose();
+
+            Rain.OnClose();
             program.DisposeChildren = true;
             program.Dispose();
 
@@ -100,7 +105,7 @@ namespace OpenGLTutorial8
             // set up the viewport and clear the previous depth and color buffers
             Gl.Viewport(0, 0, width, height);
             Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            Gl.ClearColor(30f/255,144f/255,255f/255,255f/255);
+            Gl.ClearColor(255f/255,255f/255,255f/255,255f/255);
             // make sure the shader program and texture are being used
             Gl.UseProgram(program);
             Gl.BindTexture(CarModel.bodyTexture);
@@ -162,7 +167,38 @@ namespace OpenGLTutorial8
             Gl.DrawElements(BeginMode.TriangleFan, CarModel.wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
             Gl.BindBufferToShaderAttribute(CarModel.velg4, program, "vertexPosition");
             Gl.DrawElements(BeginMode.TriangleFan, CarModel.wheel1Quads.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
+
+            //Draw Rain
+            // make sure the shader program and texture are being used
+            Gl.UseProgram(Rain.program.ProgramID);
+            Gl.BindTexture(Rain.particleTexture);
+            Rain.program["model_matrix"].SetValue(Matrix4.CreateRotationY(yangle) * Matrix4.CreateRotationX(xangle));
+
+            // update our particle list
+            for (int i = 0; i < Rain.particles.Count; i++)
+            {
+                Rain.particles[i].Update(deltaTime);
+                //if (particles[i].Life < 0) particles[i] = new Particle(Vector3.Zero);
+                if (Rain.particles[i].Life < 0) Rain.particles[i] = new Rain.Particle(new Vector3((float)Rain.generator.NextDouble() * 50 - 25, 20, (float)Rain.generator.NextDouble() * 50 - 25));
+                Rain.particlePositions[i] = Rain.particles[i].Position;
+            }
+
+            // delete our previous particle positions (if applicable) and then create a new VBO
+            if (Rain.particleVertices != null) Rain.particleVertices.Dispose();
+            Rain.particleVertices = new VBO<Vector3>(Rain.particlePositions);
+
+            // bind the VBOs to their shader attributes
+            Gl.BindBufferToShaderAttribute(Rain.particleVertices, Rain.program, "vertexPosition");
+            Gl.BindBufferToShaderAttribute(Rain.particleColors, Rain.program, "vertexColor");
+            Gl.BindBuffer(Rain.particlePoints);
+
+            // enable point sprite mode (which enables the gl_PointCoord value)
+            Gl.Enable(EnableCap.PointSprite);
+            Gl.DrawElements(BeginMode.Points, Rain.particlePoints.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
+            Gl.Disable(EnableCap.PointSprite);
+
             Glut.glutSwapBuffers();
+
         }
 
         private static void OnReshape(int width, int height)
@@ -172,6 +208,8 @@ namespace OpenGLTutorial8
 
             program.Use();
             program["projection_matrix"].SetValue(Matrix4.CreatePerspectiveFieldOfView(0.45f, (float)width / height, 0.1f, 1000f));
+            Gl.UseProgram(Rain.program.ProgramID);
+            Rain.program["projection_matrix"].SetValue(Matrix4.CreatePerspectiveFieldOfView(0.45f, (float)width / height, 0.1f, 1000f));
         }
 
         private static void OnKeyboardDown(byte key, int x, int y)
@@ -209,6 +247,9 @@ namespace OpenGLTutorial8
                 }
             }
             else if (key == 27) Glut.glutLeaveMainLoop();
+
+            if (key == 27) Glut.glutLeaveMainLoop();
+
         }
 
         private static void OnKeyboardUp(byte key, int x, int y)
@@ -242,6 +283,22 @@ namespace OpenGLTutorial8
                     Gl.Disable(EnableCap.Blend);
                     Gl.Enable(EnableCap.DepthTest);
                 }
+            }
+            if (key == 'f')
+            {
+                fullscreen = !fullscreen;
+                if (fullscreen) Glut.glutFullScreen();
+                else
+                {
+                    Glut.glutPositionWindow(0, 0);
+                    Glut.glutReshapeWindow(1280, 720);
+                }
+            }
+            else if (key == 'r')
+            {
+                Rain.rainbow = !Rain.rainbow;
+                Rain.program.Use();
+                Rain.program["static_colors"].SetValue(Rain.rainbow);
             }
         }
 
