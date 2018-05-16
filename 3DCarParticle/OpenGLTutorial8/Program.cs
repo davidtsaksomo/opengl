@@ -27,6 +27,8 @@ namespace CarParticle
         //TODO: bikin slider buat modifikasi nilai-nilai ini
         private static float ambient = 0.3f;
         private static float maxdiffuse = 1f;
+        private static float time = 0f;
+        private static int timedir = 1;
         private static WMPLib.WindowsMediaPlayer wplayer = new WMPLib.WindowsMediaPlayer();
 
         static void Main(string[] args)
@@ -37,7 +39,7 @@ namespace CarParticle
             Glut.glutInit();
             Glut.glutInitDisplayMode(Glut.GLUT_DOUBLE | Glut.GLUT_DEPTH | Glut.GLUT_MULTISAMPLE);
             Glut.glutInitWindowSize(width, height);
-            Glut.glutCreateWindow("Texture 3D Car");
+            Glut.glutCreateWindow("UAS IF3260 - Grafika Komputer");
 
             Glut.glutIdleFunc(OnRenderFrame);
             Glut.glutDisplayFunc(OnDisplay);
@@ -101,7 +103,7 @@ namespace CarParticle
             float deltaTime = (float)watch.ElapsedTicks / System.Diagnostics.Stopwatch.Frequency;
             watch.Restart();
             Console.WriteLine("FPS : " + 1f / deltaTime);
-
+            time += deltaTime * timedir;
             // perform rotation of the cube depending on the keyboard state
             if (autoRotate)
             {
@@ -122,7 +124,6 @@ namespace CarParticle
             Gl.BindTexture(CarModel.bodyTexture);
             Gl.Disable(EnableCap.Blend);
             Gl.Enable(EnableCap.DepthTest);
-
 
             // set up the model matrix and draw the cube
             program["model_matrix"].SetValue(Matrix4.CreateRotationY(yangle)  * Matrix4.CreateRotationX(xangle));
@@ -219,6 +220,16 @@ namespace CarParticle
             Gl.UseProgram(Smoke.program.ProgramID);
             Gl.BindTexture(Smoke.particleTexture);
             Smoke.program["model_matrix"].SetValue(Matrix4.CreateRotationY(yangle) * Matrix4.CreateRotationX(xangle));
+            if (time > 5f)
+            {
+                timedir = -1;
+            }
+            else if(time < 0f)
+            {
+                timedir = 1;
+
+            }
+            Smoke.program["mixer"].SetValue(time/2.5f);
 
             // update our particle list
             for (int i = 0; i < Smoke.particles.Count; i++)
@@ -308,10 +319,21 @@ namespace CarParticle
             else if (key == ' ')
             {
                 autoRotate = !autoRotate;
-                if (autoRotate)
+                if (autoRotate) {
                     wplayer.controls.play();
+
+                }
                 else
                     wplayer.controls.stop();
+
+                Rain.rainbow = !Rain.rainbow;
+                Rain.program.Use();
+                Rain.program["static_colors"].SetValue(Rain.rainbow);
+
+                Smoke.rainbow = !Smoke.rainbow;
+                Smoke.program.Use();
+                Smoke.program["static_colors"].SetValue(Smoke.rainbow);
+
             }
             else if (key == 'l') lighting = !lighting;
             else if (key == 'z')

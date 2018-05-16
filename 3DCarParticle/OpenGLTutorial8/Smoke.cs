@@ -27,6 +27,7 @@ namespace CarParticle
         public Smoke()
         {
             // create our shader program
+            particles.Clear();
             program = new ShaderProgram(VertexShader, FragmentShader);
 
             // set up the projection and view matrix
@@ -104,10 +105,11 @@ uniform mat4 projection_matrix;
 uniform mat4 view_matrix;
 uniform mat4 model_matrix;
 uniform bool static_colors;
+uniform float mixer;
 
 void main(void)
 {
-    color = (static_colors ? vertexColor : mix(vec3(0, 0, 1), vec3(0.7, 0, 1), clamp(vertexPosition.y / 2, 0, 1)));
+    color = (static_colors ? vertexColor : vec3(1 - (1*clamp(mixer,0,1)), 1*clamp(mixer-1,0,1), 1* clamp(mixer,0,1)));
    
     if (vertexPosition.y > 1) {
         gl_PointSize = 0;
